@@ -26,8 +26,8 @@ function renderTasks(text, done) {
         li.classList.add('done')
     }
 
-    span.onclick = () => {
-        li.classList.toggle
+    li.onclick = () => {
+        li.classList.toggle('done')
         saveTask();
     }
 
@@ -37,7 +37,7 @@ function renderTasks(text, done) {
         li.remove();
         saveTask();
     }
-    
+
     li.appendChild(span);
     li.appendChild(deleteBtn);
     taskList.appendChild(li);
