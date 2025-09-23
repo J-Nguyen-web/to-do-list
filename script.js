@@ -30,6 +30,14 @@ function renderTasks(text, done) {
         li.classList.toggle
         saveTask();
     }
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'X';
+    deleteBtn.onclick = () => {
+        li.remove();
+        saveTask();
+    }
+    
     li.appendChild(span);
     li.appendChild(deleteBtn);
     taskList.appendChild(li);
