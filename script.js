@@ -18,16 +18,29 @@ function newTask(){
 }
 
 function renderTasks(text, done) {
-    const li = document.createElement('li');    
+    const li = document.createElement('li');
+    const actions = document.createElement('div')
+    actions.classList.add('actions')
 
     const span = document.createElement('span');
+    const toggleBtn = document.createElement('button');
+    toggleBtn.classList.add('toggle')
+    toggleBtn.textContent = 'Done'
+    
     span.textContent = text;
-    if(done) {
-        li.classList.add('done')
+    if(done) {        
+        li.classList.add('done');
+        toggleBtn.textContent = 'Undone'
     }
 
     li.onclick = () => {
-        li.classList.toggle('done')
+        li.classList.toggle('done');
+        if(li.classList.contains('done')){
+            toggleBtn.textContent = 'Undone'
+        }else{
+            toggleBtn.textContent = 'Done'
+        }
+        
         saveTask();
     }
 
@@ -39,7 +52,9 @@ function renderTasks(text, done) {
     }
 
     li.appendChild(span);
-    li.appendChild(deleteBtn);
+    actions.appendChild(toggleBtn)
+    actions.appendChild(deleteBtn);
+    li.appendChild(actions)
     taskList.appendChild(li);
 }
 
