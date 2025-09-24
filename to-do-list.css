@@ -123,3 +123,20 @@ li button:hover {
     display: flex;
     gap: 6px;
 }
+
+.author {
+    text-align: center;
+    margin-top: 11px;
+    font-size: 11px;
+    color: #888;
+}
+
+.author a {
+    color: #d86b82;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.authot a:hover {
+    text-decoration: underline;
+}
