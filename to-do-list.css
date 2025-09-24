@@ -9,11 +9,14 @@ body {
 }
 
 .todo-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
     background: #fffaf4;
     padding: 20px;
     border-radius: 20px;
     width: 350px;
-    box-shadow: 0 6px 14px rgba(0,0,0, 0.2);
+    box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
     border: 3px solid #f6c9cc;
 }
 
@@ -140,3 +143,58 @@ li button:hover {
 .authot a:hover {
     text-decoration: underline;
 }
+
+.app {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    height: 100vh;
+    background: linear-gradient(135deg, #f0d4d7, #fff8dc);
+    font-family: 'Comic Sans MS', 'Comic Nue', sans-serif;
+}
+
+.sidebar {
+    width: 200px;
+    background: #fffaf4;
+    border-radius: 20px;
+    align-self: flex-start; /* flexing as much as its content inside*/
+    box-shadow: 0 4px 11px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.sidebar h3 {
+    margin-bottom: 11px;
+    color: #d86b82;
+    text-align: center;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    background: #ffeef0;
+    transition: background 0.3s;
+}
+
+.sidebar li:hover {
+    background: #f6c9cc;
+    color: white;
+    box-shadow: 0 5px 11px rgba(216,107,130,0.4);
+
+}
+
+.sidebar .active {
+    background: #d86b82;
+    color: white;
+    box-shadow: 0 5px 11px rgba(216,107,130,0.6);
+}
+
