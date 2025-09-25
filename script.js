@@ -1,13 +1,12 @@
 const taskInput = document.getElementById('taskInput');
 const taskList = document.getElementById('taskList');
 const categoryTitle = document.getElementById('categoryTitle');
-const categoryItems = document.getElementById('categoryItems');
+const categoryItems = document.querySelectorAll('.category-item');
 
 let curentCategory = 'Daily';
 
 window.onload = () => {
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    savedTasks.forEach(task => renderTasks(task.text, task.done))
+    loadTasks(curentCategory)
 }
 
 categoryItems.forEach(item => {
@@ -15,6 +14,7 @@ categoryItems.forEach(item => {
         categoryItems.forEach(i => i.classList.remove('active'))
         item.classList.add('active');
         curentCategory = item.dataset.category;
+        // in html li got  data-category attribute, when there is active it will take the value of  data-category
         categoryTitle.textContent = item.textContent;
         loadTasks(curentCategory);
     })
@@ -87,7 +87,7 @@ function saveTask() {
 function loadTasks(category) {
     taskList.innerHTML = '';
     const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    (tasks[category] || []).forEach(taska => renderTasks(task.text, task.done))
+    (tasks[category] || []).forEach(task => renderTasks(task.text, task.done))
 }
 
 taskInput.addEventListener('keypress',function(event){
