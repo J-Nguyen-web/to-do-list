@@ -1,11 +1,24 @@
-const taskInput = document.getElementById('taskInput')
-const taskList = document.getElementById('taskList')
+const taskInput = document.getElementById('taskInput');
+const taskList = document.getElementById('taskList');
+const categoryTitle = document.getElementById('categoryTitle');
+const categoryItems = document.getElementById('categoryItems');
+
+let curentCategory = 'Daily';
 
 window.onload = () => {
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     savedTasks.forEach(task => renderTasks(task.text, task.done))
 }
 
+categoryItems.forEach(item => {
+    item.addEventListener('click', () => {
+        categoryItems.forEach(i => i.classList.remove('active'))
+        item.classList.add('active');
+        curentCategory = item.dataset.category;
+        categoryTitle.textContent = item.textContent;
+        loadTasks(curentCategory);
+    })
+})
 function newTask(){
     const taskText = taskInput.value.trim();
     if(taskText === '') {
@@ -51,22 +64,30 @@ function renderTasks(text, done) {
         saveTask();
     }
 
-    li.appendChild(span);
+    
     actions.appendChild(toggleBtn)
     actions.appendChild(deleteBtn);
+    li.appendChild(span);
     li.appendChild(actions)
     taskList.appendChild(li);
 }
 
 function saveTask() {
-    const tasks = [];
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
+    tasks[curentCategory] = [];
     taskList.querySelectorAll('li').forEach( li => {
-        tasks.push({
+        tasks[curentCategory].push({
         text: li.querySelector('span').textContent,
         done: li.classList.contains('done')
         });
     });
     localStorage.setItem('tasks',JSON.stringify(tasks))
+}
+
+function loadTasks(category) {
+    taskList.innerHTML = '';
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
+    (tasks[category] || []).forEach(taska => renderTasks(task.text, task.done))
 }
 
 taskInput.addEventListener('keypress',function(event){
