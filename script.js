@@ -17,6 +17,14 @@ categoryItems.forEach(item => {
         // in html li got  data-category attribute, when there is active it will take the value of  data-category
         categoryTitle.textContent = item.textContent;
         loadTasks(currentCategory);
+
+        window.scrollTo ({ // after a click on category (bcoz item.addEventlistener got already on 'click')
+            top: 0, // i will go to the very top of the page
+            behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
+
+        });
+        
+        taskInput.focus(); // the class attribute taskInput will be focused
     })
 })
 function newTask(){
@@ -74,15 +82,15 @@ function renderTasks(text, done) {
 
 function saveTask() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    tasks[currentCategory] = [];
+    const currenTasks = [];
     taskList.querySelectorAll('li').forEach( li => {
-        tasks[currentCategory].push({
+        currenTasks.push({
         text: li.querySelector('span').textContent,
         done: li.classList.contains('done')
         });
     });
 
-    tasks[currentCategory] = currentCategory
+    tasks[currentCategory] = currenTasks;
     localStorage.setItem('tasks',JSON.stringify(tasks))
 }
 

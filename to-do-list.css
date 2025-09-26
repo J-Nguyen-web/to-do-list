@@ -9,7 +9,7 @@ body {
 }
 
 .todo-container {
-    margin-top: 20px;
+    margin-top: 200px;
     max-width: 35vw;
     max-height: 700px;
     overflow-y: auto; /*scrollbar will appear after max-height: 700px */
@@ -164,6 +164,8 @@ li button:hover {
 }
 
 .sidebar {
+    position: fixed;
+    top: 0;
     margin-top: 20px;
     width: 25vw;
     padding: 20px;
