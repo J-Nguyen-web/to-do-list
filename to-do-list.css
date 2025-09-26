@@ -1,9 +1,9 @@
 body {
     font-family: "Comic Sans MS", "Comic Nue", sans-serif;
     display: flex;
+    flex-direction:column;
     justify-content: center;
-    align-items: first baseline;
-    height: 100vh;
+    align-items:center;
     margin: 0;
     background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f;
 }
@@ -19,7 +19,7 @@ body {
     background: #fffaf4;
     padding: 20px;
     border-radius: 20px;
-    width: 350px;
+    width: 35vw;
     box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
     border: 3px solid #f6c9cc;
 }
@@ -164,14 +164,14 @@ li button:hover {
 }
 
 .sidebar {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    width: 20vw;
+    margin-top: 20px;
+    width: 25vw;
+    padding: 20px;
     background: #fffaf4;
     border-radius: 20px;
-    box-shadow: 0 3px 11px rgba(0,0,0,0.1);
-    padding: 20px;
+    box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
+    border: 3px solid #f6c9cc;
+    
 }
 
 .sidebar h3 {
@@ -180,6 +180,10 @@ li button:hover {
 }
 
 .sidebar ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
     list-style: none;
     padding: 0;
     margin: 0;

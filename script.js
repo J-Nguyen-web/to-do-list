@@ -3,20 +3,20 @@ const taskList = document.getElementById('taskList');
 const categoryTitle = document.getElementById('categoryTitle');
 const categoryItems = document.querySelectorAll('.category-item');
 
-let curentCategory = 'Daily';
+let currentCategory = 'Daily';
 
 window.onload = () => {
-    loadTasks(curentCategory)
+    loadTasks(currentCategory)
 }
 
 categoryItems.forEach(item => {
     item.addEventListener('click', () => {
         categoryItems.forEach(i => i.classList.remove('active'))
         item.classList.add('active');
-        curentCategory = item.dataset.category;
+        currentCategory = item.dataset.category;
         // in html li got  data-category attribute, when there is active it will take the value of  data-category
         categoryTitle.textContent = item.textContent;
-        loadTasks(curentCategory);
+        loadTasks(currentCategory);
     })
 })
 function newTask(){
@@ -74,9 +74,9 @@ function renderTasks(text, done) {
 
 function saveTask() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    tasks[curentCategory] = [];
+    tasks[currentCategory] = [];
     taskList.querySelectorAll('li').forEach( li => {
-        tasks[curentCategory].push({
+        tasks[currentCategory].push({
         text: li.querySelector('span').textContent,
         done: li.classList.contains('done')
         });
