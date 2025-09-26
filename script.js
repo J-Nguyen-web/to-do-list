@@ -81,6 +81,8 @@ function saveTask() {
         done: li.classList.contains('done')
         });
     });
+
+    tasks[currentCategory] = currentCategory
     localStorage.setItem('tasks',JSON.stringify(tasks))
 }
 
