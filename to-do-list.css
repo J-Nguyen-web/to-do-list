@@ -8,39 +8,12 @@ body {
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f; */
 }
 
-body.daily-theme {
-    background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f;
-    color: #333;
-}
-
-body.shopping-theme {
-    background: linear-gradient(135deg, #e0f7df, #b2e6b0);
-    color:  #2d4a2d;
-}
-
-body.shopping-theme .todo-container {
-    border: 2px solid #7bc47f;
-    box-shadow: 0 6px 11px rgba(0, 100, 0, 0.2);
-}
-
-body.shopping-theme .category-item.active{
-    background: #6abf70;
-    color:  #fff;
-}
-
-body.work-theme {
-    background: linear-gradient(135deg, #e8ecf1, #cfd6de);
-    color: #1f2c3a;
-}
-
-body.work-theme .todo-container {
-    border: 2px solid #8aa3b5;
-    box-shadow: 0 6px 11px rgba(20,40,60, 0.2);
-}
-
-body.work-theme .category-item.active{
-    background: #4a6fa5;
-    color: #fff;
+.app {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    height: 100vh;
+    font-family: 'Comic Sans MS', 'Comic Nue', sans-serif;
 }
 
 .todo-container {
@@ -56,6 +29,57 @@ body.work-theme .category-item.active{
     width: 360px;
     box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
     border: 3px solid #f6c9cc;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    margin-top: 20px;
+    width: 360px;
+    padding: 20px;
+    background: #fffaf4;
+    border-radius: 20px;
+    box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
+    border: 3px solid #f6c9cc;
+    
+}
+
+.sidebar h3 {
+    margin-bottom: 11px;
+    text-align: center;
+}
+
+.sidebar ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 11px;
+    margin-bottom: 8px;
+    border-radius: 15px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    background: #ffeef0;
+}
+
+.sidebar li:hover {
+    background: #f6c9cc;
+    color: white;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+
+}
+
+.sidebar .active {
+    background: #d86b82;
+    color: white;
+    box-shadow: 0 3px 8px rgba(81, 53, 59, 0.6);
 }
 
 h2 {
@@ -189,62 +213,74 @@ li button:hover {
     text-decoration: underline;
 }
 
-.app {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    height: 100vh;
-    font-family: 'Comic Sans MS', 'Comic Nue', sans-serif;
+body.daily-theme {
+    background: linear-gradient(135deg, #fae4e7, #fff8dc);
+    color: #333;
 }
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    margin-top: 20px;
-    width: 360px;
-    padding: 20px;
+body.daily-theme .todo-container,
+body.daily-theme .sidebar {
     background: #fffaf4;
-    border-radius: 20px;
-    box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
     border: 3px solid #f6c9cc;
-    
 }
-
-.sidebar h3 {
-    margin-bottom: 11px;
-    text-align: center;
-}
-
-.sidebar ul {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar li {
-    padding: 11px;
-    margin-bottom: 8px;
-    border-radius: 15px;
-    cursor: pointer;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    background: #ffeef0;
-}
-
-.sidebar li:hover {
-    background: #f6c9cc;
-    color: white;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-
-}
-
-.sidebar .active {
+body.daily-theme .category-item.active{
     background: #d86b82;
     color: white;
-    box-shadow: 0 3px 8px rgba(81, 53, 59, 0.6);
 }
 
+body.shopping-theme {
+    background: linear-gradient(135deg, #e0f7df, #b2e6b0);
+    color:  #2d4a2d;
+}
+
+body.shopping-theme .todo-container,
+body.shopping-theme .sidebar {
+    background: #e8fbe6;
+    border: 2px solid #7bc47f;
+    box-shadow: 0 6px 14px rgba(0, 100, 0, 0.2);
+}
+
+body.shopping-theme li {
+    background: #cdefcf;
+    border: 1px solid #7bc47f;
+}
+
+body.shopping-theme .category-item.active{
+    background: #acefb1;
+    color:  #fff;
+}
+body.shopping-theme #taskInput {
+    border: 2px solid #7bc47f;
+}
+body.shopping-theme button {
+    background: #acefb1;
+    border: 2px solid #7bc47f;
+}
+
+body.work-theme {
+    background: linear-gradient(135deg, #e8ecf1, #cfd6de);
+    color: #1f2c3a;
+}
+
+body.work-theme .todo-container,
+body.work-theme .sidebar {
+    background: #f0f4f9;
+    border: 3px solid #8aa3b5;
+    box-shadow: 0 6px 11px rgba(20,40,60, 0.2);
+}
+
+body.work-theme li {
+    background: #e9eff5;
+    border: 1px solid #8aa3b5;
+}
+
+body.work-theme .category-item.active{
+    background: #4a6fa5;
+    color: #fff;
+}
+body.work-theme #taskInput {
+    border: 2px solid #8aa3b5;
+}
+body.work-theme button {
+    background: #4a6fa5;
+    border: 2px solid #7bc47f;
+}
