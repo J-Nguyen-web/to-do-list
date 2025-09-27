@@ -6,6 +6,8 @@ const categoryItems = document.querySelectorAll('.category-item');
 let currentCategory = 'Daily';
 
 window.onload = () => {
+    
+        localStorage.removeItem('tasks')
     loadTasks(currentCategory)
 }
 
@@ -23,8 +25,10 @@ categoryItems.forEach(item => {
             behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
 
         });
-        
+        localStorage.removeItem('tasks')
         taskInput.focus(); // the class attribute taskInput will be focused
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
+        document.body.classList.add(currentCategory.toLowerCase() + '-theme')
     })
 })
 function newTask(){
@@ -82,22 +86,23 @@ function renderTasks(text, done) {
 
 function saveTask() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    const currenTasks = [];
+    const currentTasks = [];
     taskList.querySelectorAll('li').forEach( li => {
-        currenTasks.push({
+        currentTasks.push({
         text: li.querySelector('span').textContent,
         done: li.classList.contains('done')
         });
     });
 
-    tasks[currentCategory] = currenTasks;
+    tasks[currentCategory] = currentTasks;
     localStorage.setItem('tasks',JSON.stringify(tasks))
 }
 
 function loadTasks(category) {
     taskList.innerHTML = '';
     const tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    (tasks[category] || []).forEach(task => renderTasks(task.text, task.done))
+    const categoryTasks = Array.isArray (tasks[category]) ? tasks[category] : [];
+    categoryTasks.forEach(task => renderTasks(task.text, task.done))
 }
 
 taskInput.addEventListener('keypress',function(event){

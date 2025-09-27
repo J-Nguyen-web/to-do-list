@@ -5,12 +5,46 @@ body {
     justify-content: center;
     align-items:center;
     margin: 0;
+    /* background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f; */
+}
+
+body.daily-theme {
     background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f;
+    color: #333;
+}
+
+body.shopping-theme {
+    background: linear-gradient(135deg, #e0f7df, #b2e6b0);
+    color:  #2d4a2d;
+}
+
+body.shopping-theme .todo-container {
+    border: 2px solid #7bc47f;
+    box-shadow: 0 6px 11px rgba(0, 100, 0, 0.2);
+}
+
+body.shopping-theme .category-item.active{
+    background: #6abf70;
+    color:  #fff;
+}
+
+body.work-theme {
+    background: linear-gradient(135deg, #e8ecf1, #cfd6de);
+    color: #1f2c3a;
+}
+
+body.work-theme .todo-container {
+    border: 2px solid #8aa3b5;
+    box-shadow: 0 6px 11px rgba(20,40,60, 0.2);
+}
+
+body.work-theme .category-item.active{
+    background: #4a6fa5;
+    color: #fff;
 }
 
 .todo-container {
     margin-top: 200px;
-    max-width: 35vw;
     max-height: 700px;
     overflow-y: auto; /*scrollbar will appear after max-height: 700px */
     flex-grow: 1;
@@ -19,7 +53,7 @@ body {
     background: #fffaf4;
     padding: 20px;
     border-radius: 20px;
-    width: 35vw;
+    width: 360px;
     box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
     border: 3px solid #f6c9cc;
 }
@@ -167,7 +201,7 @@ li button:hover {
     position: fixed;
     top: 0;
     margin-top: 20px;
-    width: 25vw;
+    width: 360px;
     padding: 20px;
     background: #fffaf4;
     border-radius: 20px;
