@@ -47,7 +47,6 @@ themed-todo-list
      ```bash
      cd to-do-list
   3. Opem index.html using your browser
-  4. 
 ---
 
 ## Usage
