@@ -6,8 +6,6 @@ const categoryItems = document.querySelectorAll('.category-item');
 let currentCategory = 'Daily';
 
 window.onload = () => {
-    
-        localStorage.removeItem('tasks')
     loadTasks(currentCategory)
 }
 
@@ -25,7 +23,6 @@ categoryItems.forEach(item => {
             behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
 
         });
-        localStorage.removeItem('tasks')
         taskInput.focus(); // the class attribute taskInput will be focused
         document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
         document.body.classList.add(currentCategory.toLowerCase() + '-theme')
