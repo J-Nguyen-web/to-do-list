@@ -17,7 +17,7 @@ body {
 }
 
 .todo-container {
-    margin-top: 200px;
+    margin-top: 250px;
     max-height: 700px;
     overflow-y: auto; /*scrollbar will appear after max-height: 700px */
     flex-grow: 1;
@@ -283,4 +283,22 @@ body.work-theme #taskInput {
 body.work-theme button {
     background: #4a6fa5;
     border: 2px solid #7bc47f;
+}
+
+.new-category {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border: 2px dashed #f6c9cc;
+    border-radius: 11px;
+    background: #fff5f7;
+    color: #d86b82;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.new-category:hover {
+    background: #f6c9cc;
+    color: white;
 }
