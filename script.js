@@ -53,6 +53,21 @@ newCategoryBtn.addEventListener('click', () => {
 
         taskInput.focus();      
     });
+    
+    // Append to the sidebar with other categories
+    document.querySelector('.sidebar ul').appendChild(newCategoryItem);
+
+    // Save custom category to the list with all categories in LocalStorage
+    const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    savedCategories.push(insertedCategory);
+    localStorage.setItem('categories', JSON.stringify(savedCategories));
+
+    // initialize empty task array from this category
+    const allTasks = JSON.parse(localStorage.getItem('tasks')) || {};
+    allTasks[insertedCategory] = [];
+    localStorage.setItem('tasks', JSON.stringify(allTasks));
+
+    alert(`Category "${insertedCategory}" saved succesfully!`)
 });
 
 
