@@ -6,6 +6,38 @@ const newCategoryBtn = document.getElementById('insertCategoryBtn');
 
 let currentCategory = 'Daily';
 
+function loadSavedCategories() {
+    const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    const categoryBar = document.querySelector('.sidebar ul');
+    savedCategories.forEach( category => {
+        const newCategoryItem = document.createElement('li');
+        newCategoryItem.classList.add('category-item');
+        newCategoryItem.dataset.category = category;
+        newCategoryItem.textContent = category;
+
+        li.addEventListener('click', () => {
+            document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
+            newCategoryItem.classList.add('active');
+            currentCategory = newCategoryItem.dataset.category;
+            // in html li got  data-category attribute, when there is active it will take the value of  data-category
+            categoryTitle.textContent = newCategoryItem.textContent;
+            loadTasks(currentCategory);
+            
+            //themes
+            document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
+            document.body.classList.add('custom-theme')
+
+            window.scrollTo ({ // after a click on category (bcoz item.addEventlistener got already on 'click')
+            top: 0, // i will go to the very top of the page
+            behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
+            });
+
+            taskInput.focus(); // the class attribute taskInput will be focused        
+        });
+        categoryBar.appendChild(newCategoryItem);
+    });
+}
+
 window.onload = () => {
     loadSavedCategories();
     loadTasks(currentCategory);
@@ -40,7 +72,6 @@ newCategoryBtn.addEventListener('click', () => {
         document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
         newCategoryItem.classList.add('active');
         currentCategory = newCategoryItem.dataset.category;
-        // in html li got  data-category attribute, when there is active it will take the value of  data-category
         categoryTitle.textContent = newCategoryItem.textContent;
         loadTasks(currentCategory);
         
@@ -77,7 +108,6 @@ categoryItems.forEach(item => {
         categoryItems.forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         currentCategory = item.dataset.category;
-        // in html li got  data-category attribute, when there is active it will take the value of  data-category
         categoryTitle.textContent = item.textContent;
         loadTasks(currentCategory);
         
@@ -85,13 +115,12 @@ categoryItems.forEach(item => {
         document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
         document.body.classList.add(currentCategory.toLowerCase() + '-theme')
 
-        window.scrollTo ({ // after a click on category (bcoz item.addEventlistener got already on 'click')
-            top: 0, // i will go to the very top of the page
-            behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
-
+        window.scrollTo ({
+            top: 0,
+            behavior: "smooth",
         });
 
-        taskInput.focus(); // the class attribute taskInput will be focused        
+        taskInput.focus();
     })
 });
 
