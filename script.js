@@ -15,7 +15,7 @@ function loadSavedCategories() {
         newCategoryItem.dataset.category = category;
         newCategoryItem.textContent = category;
 
-        li.addEventListener('click', () => {
+        newCategoryItem.addEventListener('click', () => {
             document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
             newCategoryItem.classList.add('active');
             currentCategory = newCategoryItem.dataset.category;
