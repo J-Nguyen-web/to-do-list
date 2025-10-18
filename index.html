@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,11 @@
     <link rel="apple-touch-icon" href="./icons/icon.png">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="to-do-list.css">
-    <title>Document</title>
+    <title>To-Do List</title>
 </head>
+
 <body class="daily-theme">
+    <div class="wrapper">
         <div class="sidebar">
             <h2>Categories</h2>
             <ul>
@@ -18,20 +21,23 @@
                 <li class="category-item" data-category="Shopping">Shopping 🛒</li>
             </ul>
             <button id="insertCategoryBtn" class="insert-category">+ New Category</button>
-        </div>  
-
-    <div class="todo-container">
-        <h2>To-do List</h2>
-        <h2 id="categoryTitle">Daily 📝</h2>
-        <div class="input-row">
-            <input type="text" id="taskInput" placeholder="Add a new task">
-            <button onclick="newTask()">New task</button>
         </div>
-        <ul id="taskList"></ul>
-        <div class="author">
-            Made with <span>❤️</span> by <a href="https://github.com/J-Nguyen-web" target="_blank">J-Nguyen-web</a>
+
+        <div class="todo-container">
+            <h2>To-do List</h2>
+            <h2 id="categoryTitle">Daily 📝</h2>
+            <div class="input-row">
+                <input type="text" id="taskInput" placeholder="Add a new task">
+                <button onclick="newTask()">New task</button>
+            </div>
+            <ul id="taskList"></ul>
+            <div class="author">
+                Made with <span>❤️</span> by <a href="https://github.com/J-Nguyen-web" target="_blank">J-Nguyen-web</a>
+            </div>
         </div>
     </div>
+
 </body>
 <script src="script.js"></script>
+
 </html>

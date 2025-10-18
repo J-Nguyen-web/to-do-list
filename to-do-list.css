@@ -16,23 +16,28 @@ body {
     font-family: 'Comic Sans MS', 'Comic Nue', sans-serif;
 }
 
-.todo-container {
-    margin-top: 250px;
-    max-height: 700px;
-    overflow-y: auto; /*scrollbar will appear after max-height: 700px */
-    flex-grow: 1;
+.wrapper {
     display: flex;
     flex-direction: column;
+    gap: 15px;
+}
+
+.todo-container {
+    max-height: 700px;
+    width: 360px;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    overflow-y: auto; /*scrollbar will appear after max-height: 700px */
     background: #fffaf4;
     padding: 20px;
-    border-radius: 20px;
-    width: 360px;
-    box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
     border: 3px solid #f6c9cc;
+    border-radius: 20px;
+    box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
 }
 
 .sidebar {
-    position: fixed;
+    /* position: fixed; it covers the list when growing*/
     top: 0;
     margin-top: 20px;
     width: 360px;
@@ -51,17 +56,16 @@ body {
 
 .sidebar ul {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    gap: 20px;
+    column-gap: 15px;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
 .sidebar li {
-    padding: 11px;
-    margin-bottom: 8px;
     border-radius: 15px;
     cursor: pointer;
     text-align: center;
@@ -80,6 +84,49 @@ body {
     background: #d86b82;
     color: white;
     box-shadow: 0 3px 8px rgba(81, 53, 59, 0.6);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: none;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffeef0;
+    padding: 8px 11px;
+    margin-top: 8px;
+    border: 1px solid #f6c9cc;
+    border-radius: 11px;
+    transition: transform 0.2s;
+}
+
+li:hover {
+    transform: scale(1.02)
+}
+
+li.done span {
+    text-decoration: line-through;
+    color: gray;
+}
+
+li button {
+    background: #ff9e9e;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    line-height: 14px;
+    text-align: center;
+    padding: 0;
+}
+
+li button:hover {
+    background: #d86b82;
 }
 
 h2 {
@@ -149,48 +196,7 @@ button:hover {
     background: #d86b82;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: none;
-}
 
-li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #ffeef0;
-    padding: 8px 11px;
-    margin-top: 8px;
-    border: 1px solid #f6c9cc;
-    border-radius: 11px;
-    transition: transform 0.2s;
-}
-
-li:hover {
-    transform: scale(1.02)
-}
-
-li.done span {
-    text-decoration: line-through;
-    color: gray;
-}
-
-li button {
-    background: #ff9e9e;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
-    line-height: 14px;
-    text-align: center;
-    padding: 0;
-}
-
-li button:hover {
-    background: #d86b82;
-}
 .actions {
     display: flex;
     gap: 6px;
@@ -213,6 +219,7 @@ li button:hover {
     text-decoration: underline;
 }
 
+/* daily-theme */
 body.daily-theme {
     background: linear-gradient(135deg, #fae4e7, #fff8dc);
     color: #333;
@@ -227,23 +234,21 @@ body.daily-theme .category-item.active{
     color: white;
 }
 
+/* shopping-theme */
 body.shopping-theme {
     background: linear-gradient(135deg, #e0f7df, #b2e6b0);
     color:  #2d4a2d;
 }
-
 body.shopping-theme .todo-container,
 body.shopping-theme .sidebar {
     background: #e8fbe6;
     border: 2px solid #7bc47f;
     box-shadow: 0 6px 14px rgba(0, 100, 0, 0.2);
 }
-
 body.shopping-theme li {
     background: #cdefcf;
     border: 1px solid #7bc47f;
 }
-
 body.shopping-theme .category-item.active{
     background: #acefb1;
     color:  #fff;
@@ -256,23 +261,21 @@ body.shopping-theme button {
     border: 2px solid #7bc47f;
 }
 
+/* work-theme */
 body.work-theme {
     background: linear-gradient(135deg, #e8ecf1, #cfd6de);
     color: #1f2c3a;
 }
-
 body.work-theme .todo-container,
 body.work-theme .sidebar {
     background: #f0f4f9;
     border: 3px solid #8aa3b5;
     box-shadow: 0 6px 11px rgba(20,40,60, 0.2);
 }
-
 body.work-theme li {
     background: #e9eff5;
     border: 1px solid #8aa3b5;
 }
-
 body.work-theme .category-item.active{
     background: #4a6fa5;
     color: #fff;
@@ -286,7 +289,7 @@ body.work-theme button {
 }
 
 .insert-category {
-    margin-top: 10px;
+    margin-top: 20px;
     width: 100%;
     padding: 10px;
     border: 2px dashed #f6c9cc;
