@@ -7,13 +7,34 @@ const newCategoryBtn = document.getElementById('insertCategoryBtn');
 let currentCategory = 'Daily';
 
 function loadSavedCategories() {
-    const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    let savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
     const categoryBar = document.querySelector('.sidebar ul');
     savedCategories.forEach( category => {
         const newCategoryItem = document.createElement('li');
         newCategoryItem.classList.add('category-item');
         newCategoryItem.dataset.category = category;
         newCategoryItem.textContent = category;
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'X';
+        delBtn.classList.add('delete-category');
+        delBtn.onclick = () => {
+            console.log('click')
+            savedCategories = savedCategories.filter(savedCategory => savedCategory !== category);
+            localStorage.setItem('categories', JSON.stringify(savedCategories))
+            newCategoryItem.remove();
+
+            const tasks = JSON.parse(localStorage.getItem('tasks'));
+            delete tasks[category]
+            localStorage.setItem('tasks', JSON.stringify(tasks))
+            
+            
+            currentCategory = 'Daily';
+            categoryTitle.textContent = 'Daily';
+            loadTasks('Daily');
+            document.body.classList.remove('custom-theme','shopping-theme', 'work-theme')
+            document.body.classList.add('daily-theme')
+        }
+        newCategoryItem.appendChild(delBtn)
 
         newCategoryItem.addEventListener('click', () => {
             document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
@@ -42,6 +63,9 @@ window.onload = () => {
     loadSavedCategories();
     loadTasks(currentCategory);
     document.body.classList.add(currentCategory.toLowerCase() + '-theme');
+    // localStorage.removeItem('categories')
+    // localStorage.removeItem('tasks')
+    console.log(localStorage)
 }
 
 newCategoryBtn.addEventListener('click', () => {
@@ -67,7 +91,6 @@ newCategoryBtn.addEventListener('click', () => {
     newCategoryItem.textContent = insertedCategory;
 
     // add click event for the new category element
-
     newCategoryItem.addEventListener('click', () => {
         document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
         newCategoryItem.classList.add('active');

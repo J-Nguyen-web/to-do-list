@@ -196,6 +196,20 @@ button:hover {
     background: #d86b82;
 }
 
+.delete-category {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    background: #f6c9cc;
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.delete-category:hover {
+    background: #d86b82;
+}
 
 .actions {
     display: flex;
