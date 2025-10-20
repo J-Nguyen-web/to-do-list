@@ -6,58 +6,7 @@ const newCategoryBtn = document.getElementById('insertCategoryBtn');
 
 let currentCategory = 'Daily';
 
-function loadSavedCategories() {
-    let savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
-    const categoryBar = document.querySelector('.sidebar ul');
-    savedCategories.forEach( category => {
-        const newCategoryItem = document.createElement('li');
-        newCategoryItem.classList.add('category-item');
-        newCategoryItem.dataset.category = category;
-        newCategoryItem.textContent = category;
-        const delBtn = document.createElement('button');
-        delBtn.textContent = 'X';
-        delBtn.classList.add('delete-category');
-        delBtn.onclick = () => {
-            console.log('click')
-            savedCategories = savedCategories.filter(savedCategory => savedCategory !== category);
-            localStorage.setItem('categories', JSON.stringify(savedCategories))
-            newCategoryItem.remove();
 
-            const tasks = JSON.parse(localStorage.getItem('tasks'));
-            delete tasks[category]
-            localStorage.setItem('tasks', JSON.stringify(tasks))
-            
-            
-            currentCategory = 'Daily';
-            categoryTitle.textContent = 'Daily';
-            loadTasks('Daily');
-            document.body.classList.remove('custom-theme','shopping-theme', 'work-theme')
-            document.body.classList.add('daily-theme')
-        }
-        newCategoryItem.appendChild(delBtn)
-
-        newCategoryItem.addEventListener('click', () => {
-            document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
-            newCategoryItem.classList.add('active');
-            currentCategory = newCategoryItem.dataset.category;
-            // in html li got  data-category attribute, when there is active it will take the value of  data-category
-            categoryTitle.textContent = newCategoryItem.textContent;
-            loadTasks(currentCategory);
-            
-            //themes
-            document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
-            document.body.classList.add('custom-theme')
-
-            window.scrollTo ({ // after a click on category (bcoz item.addEventlistener got already on 'click')
-            top: 0, // i will go to the very top of the page
-            behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
-            });
-
-            taskInput.focus(); // the class attribute taskInput will be focused        
-        });
-        categoryBar.appendChild(newCategoryItem);
-    });
-}
 
 window.onload = () => {
     loadSavedCategories();
@@ -68,12 +17,73 @@ window.onload = () => {
     console.log(localStorage)
 }
 
+// = CREATE CATEGORY =
+function createCategoryElement (categoryName, isCustom = false) {
+    // create new category element
+    const customCategory = document.createElement('li');
+    customCategory.classList.add('category-item');
+    customCategory.dataset.category = categoryName;
+    // in html li got data-category attribute, when there is active it will take the value of  data-category
+    customCategory.textContent = categoryName;
+
+// add delete button for custom categories
+    if(isCustom) {
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'X';
+        delBtn.classList.add('delete-category');
+        delBtn.title = 'Delete this category';
+        delBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            // preventing click on category
+            const confirmDel = confirm(`Delete category "${categoryName}" and all its tasks?`)
+            if(confirmDel) removeCategory(categoryName, customCategory)
+        });
+        customCategory.appendChild(delBtn)
+    }
+
+    // add click event for the new category element
+    customCategory.addEventListener('click', () => {
+        document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
+        customCategory.classList.add('active');
+        currentCategory = categoryName;
+        categoryTitle.textContent = categoryName;
+        loadTasks(currentCategory);
+    
+        // change themes based on category
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
+        if (['Daily', 'Shopping', 'Work'].includes(categoryName)) {
+            document.body.classList.add(categoryName.toLowerCase() + '-theme')
+        } else {
+            document.body.classList.add('custom-theme')
+        }    
+
+        // auto scroll up & focus
+        window.scrollTo ({ // after a click on category (bcoz item.addEventlistener got already on 'click')
+            top: 0, // i will go to the very top of the page
+            behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
+            });
+
+        taskInput.focus(); // the class attribute taskInput will be focused
+    });
+
+    return customCategory;
+}
+
+function loadSavedCategories() {
+    let savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    const categoryBar = document.querySelector('.sidebar ul');
+    
+    savedCategories.forEach( category => {
+        const customCategory = createCategoryElement(category, true);
+        categoryBar.appendChild(customCategory);
+    });
+}
 newCategoryBtn.addEventListener('click', () => {
     const newCategory = prompt('Enter a name for the new category:')
     if(!newCategory) return;
     
     const insertedCategory = newCategory.trim();
-    if (insertedCategory === '') return;
+    if (insertedCategory === '') return alert('Category name cannot be empty');
 
     // check for duplicates
     const exists = Array.from(categoryItems).some(
@@ -84,32 +94,7 @@ newCategoryBtn.addEventListener('click', () => {
         return;
     }
 
-    // create new category element
-    const newCategoryItem = document.createElement('li');
-    newCategoryItem.classList.add('category-item');
-    newCategoryItem.dataset.category = insertedCategory;
-    newCategoryItem.textContent = insertedCategory;
-
-    // add click event for the new category element
-    newCategoryItem.addEventListener('click', () => {
-        document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
-        newCategoryItem.classList.add('active');
-        currentCategory = newCategoryItem.dataset.category;
-        categoryTitle.textContent = newCategoryItem.textContent;
-        loadTasks(currentCategory);
-        
-        //themes
-        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
-        document.body.classList.add('custom-theme')
-
-        window.scrollTo ({ top: 0, behavior: "smooth", 
-        });
-
-        taskInput.focus();      
-    });
     
-    // Append to the sidebar with other categories
-    document.querySelector('.sidebar ul').appendChild(newCategoryItem);
 
     // Save custom category to the list with all categories in LocalStorage
     const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
@@ -120,32 +105,31 @@ newCategoryBtn.addEventListener('click', () => {
     const allTasks = JSON.parse(localStorage.getItem('tasks')) || {};
     allTasks[insertedCategory] = [];
     localStorage.setItem('tasks', JSON.stringify(allTasks));
-
-    alert(`Category "${insertedCategory}" saved succesfully!`)
 });
 
+// = REMOVE CUSTOM CATEGORY =
+function removeCategory(categoryName, categoryItem){
+    categoryItem.remove();
 
+    // remove from localStorage categories list
+    let savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    savedCategories = savedCategories.filter(category => category !== categoryName);
+    localStorage.setItem('categories', JSON.stringify(savedCategories));
 
-categoryItems.forEach(item => {
-    item.addEventListener('click', () => {
-        categoryItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        currentCategory = item.dataset.category;
-        categoryTitle.textContent = item.textContent;
-        loadTasks(currentCategory);
-        
-        //themes
-        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
-        document.body.classList.add(currentCategory.toLowerCase() + '-theme')
+    // remove its taska
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || {}
+    delete tasks[categoryName];
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 
-        window.scrollTo ({
-            top: 0,
-            behavior: "smooth",
-        });
-
-        taskInput.focus();
-    })
-});
+    // set category to Daily
+    if(currentCategory === categoryName) {
+        currentCategory = 'Daily';
+        categoryTitle.textContent = 'Daily';
+        loadTasks('Daily');
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme');
+        document.body.classList.add('daily-theme');
+    }
+}
 
 function newTask(){
     const taskText = taskInput.value.trim();
@@ -202,13 +186,13 @@ function renderTasks(text, done) {
 }
 
 function saveTask() {
-    const tasks = JSON.parse(localStorage.getItem('tasks') || '{}') ;
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || '{}' ;
     const currentTasks = [];
 
     taskList.querySelectorAll('li').forEach( li => {
         currentTasks.push({
-        text: li.querySelector('span').textContent,
-        done: li.classList.contains('done')
+            text: li.querySelector('span').textContent,
+            done: li.classList.contains('done')
         });
     });
 
