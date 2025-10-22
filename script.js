@@ -6,8 +6,6 @@ const newCategoryBtn = document.getElementById('insertCategoryBtn');
 
 let currentCategory = 'Daily';
 
-
-
 window.onload = () => {
     loadSavedCategories();
     loadTasks(currentCategory);
@@ -16,6 +14,27 @@ window.onload = () => {
     // localStorage.removeItem('tasks')
     console.log(localStorage)
 }
+
+categoryItems.forEach(item => {
+    item.addEventListener('click', () => {
+        categoryItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentCategory = item.dataset.category;
+        categoryTitle.textContent = item.textContent;
+        loadTasks(currentCategory);
+        
+        //themes
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
+        document.body.classList.add(currentCategory.toLowerCase() + '-theme')
+
+        window.scrollTo ({
+            top: 0,
+            behavior: "smooth",
+        });
+
+        taskInput.focus();
+    })
+});
 
 // = CREATE CATEGORY =
 function createCategoryElement (categoryName, isCustom = false) {
@@ -43,7 +62,7 @@ function createCategoryElement (categoryName, isCustom = false) {
 
     // add click event for the new category element
     customCategory.addEventListener('click', () => {
-        document.querySelectorAll('category-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
         customCategory.classList.add('active');
         currentCategory = categoryName;
         categoryTitle.textContent = categoryName;
@@ -79,14 +98,14 @@ function loadSavedCategories() {
     });
 }
 newCategoryBtn.addEventListener('click', () => {
-    const newCategory = prompt('Enter a name for the new category:')
+    const newCategory = prompt('Enter a name for the new category:');
     if(!newCategory) return;
     
     const insertedCategory = newCategory.trim();
     if (insertedCategory === '') return alert('Category name cannot be empty');
 
     // check for duplicates
-    const exists = Array.from(categoryItems).some(
+    const exists = Array.from(document.querySelectorAll('.category-item')).some(
         item => item.dataset.category.toLowerCase() === insertedCategory.toLowerCase()
     );
     if(exists) {
@@ -94,12 +113,11 @@ newCategoryBtn.addEventListener('click', () => {
         return;
     }
 
-    
-
     // Save custom category to the list with all categories in LocalStorage
     const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
     savedCategories.push(insertedCategory);
     localStorage.setItem('categories', JSON.stringify(savedCategories));
+    loadSavedCategories();
 
     // initialize empty task array from this category
     const allTasks = JSON.parse(localStorage.getItem('tasks')) || {};
