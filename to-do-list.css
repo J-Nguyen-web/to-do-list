@@ -319,3 +319,63 @@ body.work-theme button {
     background: #f6c9cc;
     color: white;
 }
+
+body.custom-theme {
+    background: linear-gradient(135deg, #f2e6f9, #e9ddf2);
+    color: #4a355e;
+}
+
+body.custom-theme .todo-container,
+body.custom-theme .sidebar {
+    background: #f9f5fc;
+    border: 2px solid #cdb5e3;
+    box-shadow: 0 6px 14px rgba(90, 60, 120, 0.15);
+}
+
+body.custom-theme li {
+    background: #f2e8fa;
+    border:  1px solid #cdb5e3;
+}
+
+body.custom-theme li:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(90, 60, 120, 0.2);
+}
+
+body.custom-theme .category-item.active {
+    background: #b48edc;
+    color:white;
+}
+
+body.custom-theme .sidebar li:hover {
+    background: #c9a9e9;
+    color: white;
+    box-shadow: 0 3px 8px rgba(90, 60, 120, 0.4);
+}
+
+body.custom-theme button {
+    background: #c9a9e9;
+    color: #fff;
+    border: none;
+    transition: background 0.3s;
+}
+
+body.custom-theme button:hover {
+    background: #b48edc;
+}
+
+body.custom-theme .delete-category {
+    background: #d1b4ec;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+}
+
+body.custom-theme .delete-category:hover {
+    background: #b48edc;
+    color: #fff;
+}

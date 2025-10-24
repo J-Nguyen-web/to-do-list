@@ -24,7 +24,7 @@ categoryItems.forEach(item => {
         loadTasks(currentCategory);
         
         //themes
-        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme', 'custom-theme')
         document.body.classList.add(currentCategory.toLowerCase() + '-theme')
 
         window.scrollTo ({
@@ -141,11 +141,15 @@ function removeCategory(categoryName, categoryItem){
 
     // set category to Daily
     if(currentCategory === categoryName) {
+        console.log('categories')
         currentCategory = 'Daily';
         categoryTitle.textContent = 'Daily';
         loadTasks('Daily');
-        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme');
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme', 'custom-theme');
         document.body.classList.add('daily-theme');
+        const dailyCategory = document.querySelector('.sidebar ul li');
+        dailyCategory.classList.add('active');       
+
     }
 }
 
