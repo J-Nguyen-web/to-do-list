@@ -1,3 +1,11 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: "Comic Sans MS", "Comic Nue", sans-serif;
     display: flex;
@@ -8,23 +16,18 @@ body {
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f; */
 }
 
-.app {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    height: 100vh;
-    font-family: 'Comic Sans MS', 'Comic Nue', sans-serif;
-}
-
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1rem;
+    min-width: 360px;
+    max-width: 500px;
+
 }
 
 .todo-container {
     max-height: 700px;
-    width: 360px;
+    width: 100%;
     display: flex;
     flex-grow: 1;
     flex-direction: column;
@@ -40,8 +43,8 @@ body {
     /* position: fixed; it covers the list when growing*/
     top: 0;
     margin-top: 20px;
-    width: 360px;
-    padding: 20px;
+    width: 100%;
+    padding: 0.75rem;
     background: #fffaf4;
     border-radius: 20px;
     box-shadow: 0 6px 14px rgba(0,0,0, 0.15);
@@ -58,19 +61,23 @@ body {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    justify-content: center;
-    column-gap: 15px;
+    justify-content: start;
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
 .sidebar li {
+    margin: auto;
     border-radius: 15px;
+    justify-content: start;
+    width: 8rem;
     cursor: pointer;
     text-align: center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     background: #ffeef0;
+    
 }
 
 .sidebar li:hover {
@@ -99,7 +106,7 @@ li {
     align-items: center;
     background: #ffeef0;
     padding: 8px 11px;
-    margin-top: 8px;
+    margin-top: 1rem;
     border: 1px solid #f6c9cc;
     border-radius: 11px;
     transition: transform 0.2s;
@@ -303,6 +310,7 @@ body.work-theme button {
 }
 
 .insert-category {
+    margin: 0;
     margin-top: 20px;
     width: 100%;
     padding: 10px;
@@ -378,4 +386,13 @@ body.custom-theme .delete-category {
 body.custom-theme .delete-category:hover {
     background: #b48edc;
     color: #fff;
+}
+
+@media (min-width:768px) {
+    .wrapper {
+        flex-direction: row;
+        justify-content:space-between ;
+        max-width: unset;
+        width: 100%;
+    }
 }
