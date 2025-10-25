@@ -141,14 +141,13 @@ function removeCategory(categoryName, categoryItem){
 
     // set category to Daily
     if(currentCategory === categoryName) {
-        console.log('categories')
+        const dailyCategory = document.querySelector('.sidebar ul li');
         currentCategory = 'Daily';
-        categoryTitle.textContent = 'Daily';
+        categoryTitle.textContent = dailyCategory.textContent;
         loadTasks('Daily');
         document.body.classList.remove('daily-theme','shopping-theme', 'work-theme', 'custom-theme');
         document.body.classList.add('daily-theme');
-        const dailyCategory = document.querySelector('.sidebar ul li');
-        dailyCategory.classList.add('active');       
+        dailyCategory.classList.add('active');
 
     }
 }
