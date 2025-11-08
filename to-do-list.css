@@ -22,6 +22,7 @@ body {
     gap: 1rem;
     min-width: 360px;
     max-width: 500px;
+    padding: 1rem;
 
 }
 
@@ -71,7 +72,7 @@ body {
 .sidebar li {
     margin: auto;
     border-radius: 15px;
-    justify-content: start;
+    justify-content: center;
     width: 8rem;
     cursor: pointer;
     text-align: center;
@@ -90,7 +91,7 @@ body {
 .sidebar .active {
     background: #d86b82;
     color: white;
-    box-shadow: 0 3px 8px rgba(81, 53, 59, 0.6);
+    box-shadow: 0 3px 8px rgba(81, 53, 59, 0.7);
 }
 
 ul {
@@ -389,10 +390,33 @@ body.custom-theme .delete-category:hover {
 }
 
 @media (min-width:768px) {
+    .container{
+        width: 100vw;
+    }
     .wrapper {
         flex-direction: row;
         justify-content:space-between ;
         max-width: unset;
         width: 100%;
+    }
+    .sidebar {
+        position: sticky;
+        max-width: 280px;
+        left: 0;
+        margin-top: unset;
+        /* за да не расте със нарастването на елемента в който е,
+        му задаваме да е 100% от съдържанието си
+        и максимално да е 100% от съдържанието си,
+        при което ще нараства спрямо себе си, а не спрямо елементи във flex-а */
+        height: 100%;
+        max-height: 100%;
+    }
+    .sidebar ul {
+        flex-direction: column;
+    }
+    .sidebar li {
+        margin: unset;
+        width: 100%;
+        text-align: right;
     }
 }
