@@ -1,6 +1,9 @@
 {
     "name": "To-Do List",
     "short_name": "To-Do List",
+    "start_url": "/to-do-list/",
+    "scope": "/to-do-list/",
+    "display": "standalone",
     "icons": [
         {
             "src": "/icons/icon-192x192.png",
@@ -12,7 +15,6 @@
             "sizes": "512x512",
             "type": "image/png"
         }
-    ],
-    "start_url": "/",
-    "display": "standalone"
+    ]
+    
 }
