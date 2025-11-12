@@ -3,8 +3,8 @@ A lightweight,reponsive, and category-based **To-Do List application** built wit
 The app supports multiple categories (`Daily`, `Shopping`, `Work`) each with a distinct theme to enhance user focu and expirience .
 
 Screenshots
-  <a href="https://j-nguyen-web.github.io/to-do-list/"><p><img width="200px" src="https://i.ibb.co/chDdWKDX/calc.jpg" alt="calc" border="1"></p></a>
-  <a href="https://j-nguyen-web.github.io/to-do-list/"><p><img width="200px" src="https://i.ibb.co/SqWWVdR/calc.jpg" alt="calc" border="1"></p></a>
+  <a href="https://j-nguyen-web.github.io/to-do-list/"><p><img width="500px" src="https://i.ibb.co/CG0h7Mr/calc.jpg" alt="calc" border="1"></p></a>
+  <a href="https://j-nguyen-web.github.io/to-do-list/"><p><img width="1100px" src="https://i.ibb.co/SqWWVdR/calc.jpg" alt="calc" border="1"></p></a>
 
 ---
   ## Demo
