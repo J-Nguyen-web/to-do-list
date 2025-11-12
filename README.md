@@ -3,8 +3,8 @@ A lightweight,reponsive, and category-based **To-Do List application** built wit
 The app supports multiple categories (`Daily`, `Shopping`, `Work`) each with a distinct theme to enhance user focu and expirience .
 
 Screenshots
-  <a href="https://j-nguyen-web.github.io/to-do-list/"><p><img width="100px" src="https://i.ibb.co/CG0h7Mr/calc.jpg" alt="calc" border="1"></p></a>
-  <a href="https://j-nguyen-web.github.io/to-do-list/"><p><img width="100px" src="https://i.ibb.co/SqWWVdR/calc.jpg" alt="calc" border="1"></p></a>
+  <a href="https://j-nguyen-web.github.io/to-do-list/"><img width="100px" src="https://i.ibb.co/CG0h7Mr/calc.jpg" alt="calc" border="1"></a>
+  <a href="https://j-nguyen-web.github.io/to-do-list/"><img width="100px" src="https://i.ibb.co/SqWWVdR/calc.jpg" alt="calc" border="1"></a>
 
 ---
   ## Demo
@@ -69,7 +69,7 @@ themed-todo-list
 ## Future Development
 - Dark Mode toggle
 
-- <img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/707f124e-8d8e-4d62-8b73-314ea57e4e38" />
+- <img width="20px" height="20px" alt="image" src="https://github.com/user-attachments/assets/707f124e-8d8e-4d62-8b73-314ea57e4e38" />
  Custom category creation
 - Task search and filtering
 - Drag-and-drop task reordering
