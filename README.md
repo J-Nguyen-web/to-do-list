@@ -4,7 +4,7 @@ The app supports multiple categories (`Daily`, `Shopping`, `Work`) each with a d
 
 Screenshots
 
-<a href="https://imgbb.com/"><img src="https://i.ibb.co/pFXJzRm/Screenshot-2025-11-12-223415.png" alt="Screenshot-2025-11-12-223415" border="0" /></a>
+<a href="https://ibb.co/CG0h7Mr"><img src="https://i.ibb.co/CG0h7Mr/Screenshot-2025-11-12-223415.png" alt="Screenshot-2025-11-12-223415" border="0" /></a>
 
 <a href="https://ibb.co/SqWWVdR"><img src="https://i.ibb.co/yLGGgYW/Screenshot-2025-11-12-222225.png" alt="Screenshot-2025-11-12-222225" border="0" /></a>
 
