@@ -2,6 +2,15 @@
 A lightweight,reponsive, and category-based **To-Do List application** built with **JavaScript, CSS and HTML**.
 The app supports multiple categories (`Daily`, `Shopping`, `Work`) each with a distinct theme to enhance user focu and expirience .
 
+Screenshots
+
+<a href="https://j-nguyen-web.github.io/to-do-list/"><img src="https://i.ibb.co/yLGGgYW/Screenshot-2025-11-12-222225.png" alt="Screenshot-2025-11-12-222225" border="0" /></a>
+
+---
+  ## Demo
+
+  [Live Demo](https://j-nguyen-web.github.io/to-do-list/)
+
 ---
 
 ### Features
@@ -57,9 +66,10 @@ themed-todo-list
 
 ---
 
-## Future Develpment
+## Future Development
 - Dark Mode toggle
-- Custom category creation
+
+- <img width="14px" height="14px" alt="image" src="https://github.com/user-attachments/assets/707f124e-8d8e-4d62-8b73-314ea57e4e38" /> Custom category creation
 - Task search and filtering
 - Drag-and-drop task reordering
 - Sync taskas across devices using cloud storage or account-based sync
