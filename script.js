@@ -18,6 +18,7 @@ window.onload = () => {
 categoryItems.forEach(item => {
     item.addEventListener('click', () => {
         categoryItems.forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         currentCategory = item.dataset.category;
         categoryTitle.textContent = item.textContent;
@@ -42,7 +43,7 @@ function createCategoryElement (categoryName, isCustom = false) {
     const customCategory = document.createElement('li');
     customCategory.classList.add('category-item');
     customCategory.dataset.category = categoryName;
-    // in html li got data-category attribute, when there is active it will take the value of  data-category
+    // in html li got data-category attribute, when there is active it will take the value of data-category
     customCategory.textContent = categoryName;
 
 // add delete button for custom categories
@@ -69,7 +70,7 @@ function createCategoryElement (categoryName, isCustom = false) {
         loadTasks(currentCategory);
     
         // change themes based on category
-        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme')
+        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme', 'custom-theme')
         if (['Daily', 'Shopping', 'Work'].includes(categoryName)) {
             document.body.classList.add(categoryName.toLowerCase() + '-theme')
         } else {
@@ -84,7 +85,6 @@ function createCategoryElement (categoryName, isCustom = false) {
 
         taskInput.focus(); // the class attribute taskInput will be focused
     });
-
     return customCategory;
 }
 
@@ -117,7 +117,10 @@ newCategoryBtn.addEventListener('click', () => {
     const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
     savedCategories.push(insertedCategory);
     localStorage.setItem('categories', JSON.stringify(savedCategories));
-    loadSavedCategories();
+    // loadSavedCategories();
+    const categoryBar = document.querySelector('.sidebar ul');
+    const newCategoryElement = createCategoryElement(insertedCategory, true)
+    categoryBar.appendChild(newCategoryElement);
 
     // initialize empty task array from this category
     const allTasks = JSON.parse(localStorage.getItem('tasks')) || {};
@@ -207,7 +210,7 @@ function renderTasks(text, done) {
 }
 
 function saveTask() {
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || '{}' ;
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || {} ;
     const currentTasks = [];
 
     taskList.querySelectorAll('li').forEach( li => {
