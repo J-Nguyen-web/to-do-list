@@ -33,7 +33,7 @@ categoryItems.forEach(item => {
             behavior: "smooth",
         });
 
-        taskInput.focus();
+        // taskInput.focus();
     })
 });
 
