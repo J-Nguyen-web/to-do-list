@@ -15,6 +15,10 @@ window.onload = () => {
     console.log(localStorage)
 }
 
+function isMobile(){
+    return window.matchMedia('(pointer: coarse)').matches;
+}
+
 categoryItems.forEach(item => {
     item.addEventListener('click', () => {
         categoryItems.forEach(i => i.classList.remove('active'));
@@ -33,7 +37,10 @@ categoryItems.forEach(item => {
             behavior: "smooth",
         });
 
-        // taskInput.focus();
+        if(!isMobile){
+            taskInput.focus();
+        }
+        
     })
 });
 
