@@ -12,9 +12,10 @@ window.onload = () => {
     document.body.classList.add(currentCategory.toLowerCase() + '-theme');
     // localStorage.removeItem('categories')
     // localStorage.removeItem('tasks')
-    console.log(localStorage)
+    // console.log(localStorage)
 }
 
+// function that chech the type of the device
 function isMobile(){
     return window.matchMedia('(pointer: coarse)').matches;
 }
@@ -90,7 +91,9 @@ function createCategoryElement (categoryName, isCustom = false) {
             behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
             });
 
-        taskInput.focus(); // the class attribute taskInput will be focused
+        if(!isMobile){
+            taskInput.focus();
+        } // the class attribute taskInput will be focused
     });
     return customCategory;
 }
