@@ -38,9 +38,9 @@ categoryItems.forEach(item => {
             behavior: "smooth",
         });
 
-        if(!isMobile){
-            taskInput.focus();
-        }
+        // if(!isMobile){
+        //     taskInput.focus();
+        // }
         
     })
 });
@@ -91,9 +91,9 @@ function createCategoryElement (categoryName, isCustom = false) {
             behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
             });
 
-        if(!isMobile){
-            taskInput.focus();
-        } // the class attribute taskInput will be focused
+        // if(!isMobile){
+        //     taskInput.focus();
+        // } // the class attribute taskInput will be focused
     });
     return customCategory;
 }
