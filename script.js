@@ -207,8 +207,12 @@ function renderTasks(text, done) {
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'X';
     deleteBtn.onclick = () => {
-        li.remove();
+        const confrimDelTask = confirm(`Delete task?`)
+        if(confrimDelTask) {
+            li.remove();
         saveTask();
+        }
+        
     }
 
     
