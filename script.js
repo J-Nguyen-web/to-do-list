@@ -118,6 +118,7 @@ newCategoryBtn.addEventListener('click', () => {
     const exists = Array.from(document.querySelectorAll('.category-item')).some(
         item => item.dataset.category.toLowerCase() === insertedCategory.toLowerCase()
     );
+
     if(exists) {
         alert('that category already exists!');
         return;
@@ -212,15 +213,15 @@ function renderTasks(text, done) {
             li.remove();
         saveTask();
         }
-        
     }
 
-    
     actions.appendChild(toggleBtn)
     actions.appendChild(deleteBtn);
     li.appendChild(span);
     li.appendChild(actions)
     taskList.appendChild(li);
+
+    enableDragDrop(li) // enables dragging
 }
 
 function saveTask() {
@@ -261,3 +262,38 @@ taskInput.addEventListener('keypress',function(event){
         newTask();
     }
 });
+
+let draggedItem = null;
+
+//прикрепяне на ивента към всеки task
+function enableDragDrop(li) {
+
+    // === TOUCH (mobile) === //
+    li.addEventListener('touchstart', (event) => {
+        draggedItem = li;
+        li.classList.add('dragging');
+    });
+
+    li.addEventListener('touchmove', (event) => {
+        event.preventDefault();
+
+        const touch = event.touches[0];
+        const elementBelow = document.elementFromPoint(touch.client, touch.clientY);
+        
+        if(!elementBelow) return;
+
+        const targetLi = elementBelow.closest('li');
+        if(targetLi && targetLi !== draggedItem) {
+            const rect = targetLi.getBoundingClientRect();
+            const isBelow = touch.clientY > rect.top + rect.height / 2;
+
+            taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
+        }
+    });
+
+    li.addEventListener('touched', () => {
+        li.classList.remove('dragging');
+        draggedItem = null;
+        saveTask();
+    })
+}

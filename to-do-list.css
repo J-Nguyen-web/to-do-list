@@ -112,6 +112,7 @@ li {
     border: 1px solid #f6c9cc;
     border-radius: 11px;
     transition: transform 0.2s;
+    touch-action: none;/* да няма scroll conflict */    
 }
 
 li:hover {
@@ -136,6 +137,11 @@ li button {
 
 li button:hover {
     background: #d86b82;
+}
+
+li:dragging {
+    opacity: 0.5,
+    transform: scale(1.05)
 }
 
 h2 {
