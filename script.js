@@ -295,5 +295,29 @@ function enableDragDrop(li) {
         li.classList.remove('dragging');
         draggedItem = null;
         saveTask();
+    });
+
+    // === MOUSE (Decstop) === //
+    li.setAttribute('draggable', true);
+
+    li.addEventListener('dragstart', () => {
+        draggedItem = li;
+        li.classList.add('dragging');
+    });
+
+    li.addEventListener('dragend', () => {
+        li.classList.remove('dragging');
+        draggedItem = null;
+        saveTask();
+    });
+    
+    taskList.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        const afterElement = getDragAfterElement(taskList, event.clientY);
+        if (afterElement == null) {
+            taskList.appendChild(draggedItem);
+        } else {
+            taskList.insertBefore(draggedItem, afterElement);
+        }
     })
 }
