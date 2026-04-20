@@ -268,13 +268,22 @@ let draggedItem = null;
 //прикрепяне на ивента към всеки task
 function enableDragDrop(li) {
 
+    let holdTimeout;
+    let isDragging = false;
+
     // === TOUCH (mobile) === //
     li.addEventListener('touchstart', (event) => {
-        draggedItem = li;
-        li.classList.add('dragging');
+        holdTimeout = setTimeout(() => {
+            isDragging = true;
+            draggedItem = li;
+            li.classList.add('dragging');
+        }, 300) // hold time
     });
 
     li.addEventListener('touchmove', (event) => {
+
+        if( !isDragging) return;
+
         event.preventDefault();
 
         const touch = event.touches[0];
@@ -291,11 +300,21 @@ function enableDragDrop(li) {
         }
     });
 
-    li.addEventListener('touched', () => {
-        li.classList.remove('dragging');
-        draggedItem = null;
-        saveTask();
+    li.addEventListener('touchend', () => {
+        clearTimeout(holdTimeout);
+        if(isDragging) {
+            li.classList.remove('dragging');
+            draggedItem = null;
+            saveTask();
+        }
+
+        isDragging = false;
     });
+
+    li.addEventListener('touchcancel', () => {
+        clearTimeout(holdTimeout);
+        isDragging = false;
+    })
 
     // === MOUSE (Decstop) === //
     li.setAttribute('draggable', true);
