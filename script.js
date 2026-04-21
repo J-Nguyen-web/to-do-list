@@ -15,6 +15,17 @@ window.onload = () => {
     // console.log(localStorage)
 }
 
+    
+    taskList.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        const afterElement = getDragAfterElement(taskList, event.clientY);
+        if (afterElement == null) {
+            taskList.appendChild(draggedItem);
+        } else {
+            taskList.insertBefore(draggedItem, afterElement);
+        }
+    })
+
 // function that chech the type of the device
 function isMobile(){
     return window.matchMedia('(pointer: coarse)').matches;
@@ -194,13 +205,12 @@ function renderTasks(text, done) {
         toggleBtn.textContent = 'Undone'
     }
 
-    li.onclick = () => {
+    toggleBtn.onclick = () => {
         li.classList.toggle('done');
-        if(li.classList.contains('done')){
-            toggleBtn.textContent = 'Undone'
-        }else{
-            toggleBtn.textContent = 'Done'
-        }
+
+        toggleBtn.textContent = li.classList.contains('done')
+            ? 'Undone'
+            : 'Done';        
         
         saveTask();
     }
@@ -287,7 +297,7 @@ function enableDragDrop(li) {
         event.preventDefault();
 
         const touch = event.touches[0];
-        const elementBelow = document.elementFromPoint(touch.client, touch.clientY);
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
         
         if(!elementBelow) return;
 
@@ -329,21 +339,12 @@ function enableDragDrop(li) {
         draggedItem = null;
         saveTask();
     });
-    
-    taskList.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        const afterElement = getDragAfterElement(taskList, event.clientY);
-        if (afterElement == null) {
-            taskList.appendChild(draggedItem);
-        } else {
-            taskList.insertBefore(draggedItem, afterElement);
-        }
-    })
+
 }
 
 // === Helper for mouse drag === //
 function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('li:not(.dragging')];
+    const draggableElements = [...container.querySelectorAll('li:not(.dragging)')];
 
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
