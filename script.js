@@ -15,16 +15,21 @@ window.onload = () => {
     // console.log(localStorage)
 }
 
+let draggedItem = null;
+let isDragging = false;
+let holdTimeout;
     
-    taskList.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        const afterElement = getDragAfterElement(taskList, event.clientY);
-        if (afterElement == null) {
-            taskList.appendChild(draggedItem);
-        } else {
-            taskList.insertBefore(draggedItem, afterElement);
-        }
-    })
+taskList.addEventListener('dragover', (event) => {
+    event.preventDefault();
+
+    const afterElement = getDragAfterElement(taskList, event.clientY);
+    
+    if (afterElement == null) {
+        taskList.appendChild(draggedItem);
+    } else {
+        taskList.insertBefore(draggedItem, afterElement);
+    }
+})
 
 // function that chech the type of the device
 function isMobile(){
@@ -273,20 +278,19 @@ taskInput.addEventListener('keypress',function(event){
     }
 });
 
-let draggedItem = null;
-
 //прикрепяне на ивента към всеки task
 function enableDragDrop(li) {
 
-    let holdTimeout;
-    let isDragging = false;
-
     // === TOUCH (mobile) === //
-    li.addEventListener('touchstart', (event) => {
+    li.addEventListener('touchstart', () => {
         holdTimeout = setTimeout(() => {
             isDragging = true;
             draggedItem = li;
             li.classList.add('dragging');
+
+            // само определени devices поддържат тази вибрация
+            if (navigator.vibrate) navigator.vibrate(8)
+
         }, 300) // hold time
     });
 
@@ -308,10 +312,13 @@ function enableDragDrop(li) {
 
             taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
         }
+
+        autoScroll(touch.clientY)
     });
 
     li.addEventListener('touchend', () => {
         clearTimeout(holdTimeout);
+
         if(isDragging) {
             li.classList.remove('dragging');
             draggedItem = null;
@@ -350,10 +357,10 @@ function getDragAfterElement(container, y) {
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
 
-        if(offset< 0 && offset > closest.offset) {
+        if(offset < 0 && offset > closest.offset) {
             return { offset: offset, element: child };
         } else {
-            return closest
+            return closest;
         }
         }, { offset: Number.NEGATIVE_INFINITY}).element
 }

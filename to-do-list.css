@@ -111,12 +111,12 @@ li {
     margin-top: 1rem;
     border: 1px solid #f6c9cc;
     border-radius: 11px;
-    transition: transform 0.2s;
-    touch-action: none;/* да няма scroll conflict */    
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    touch-action: none;/* да няма scroll conflict */
 }
 
 li:hover {
-    transform: scale(1.02)
+    transform: scale(1.02);
 }
 
 li.done span {
@@ -140,8 +140,14 @@ li button:hover {
 }
 
 li:dragging {
-    opacity: 0.5,
-    transform: scale(1.05)
+    opacity: 0.6;
+    transform: scale(1.06);
+    z-index: 8;
+}
+
+li.placeholder {
+    border: 2px dashed #b8b1b1;
+    background: transparent;
 }
 
 h2 {
