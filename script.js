@@ -278,6 +278,19 @@ taskInput.addEventListener('keypress',function(event){
     }
 });
 
+function autoScroll(pointerY) {
+    const threshold = 80; // разстояние от екрана
+    const speed = 8;
+
+    const viewportHeight = window.innerHeight;
+
+    if( pointerY < threshold ) {
+        windows.scrollBy(0, -speed);
+    } else if (pointerY > viewportHeight - threshold) {
+        window.scrollBy(0, speed);
+    }
+}
+
 //прикрепяне на ивента към всеки task
 function enableDragDrop(li) {
 
@@ -298,10 +311,11 @@ function enableDragDrop(li) {
 
         if( !isDragging) return;
 
-        event.preventDefault();
+        event.preventDefault(); // prevent default behaviour - for touch is scrolling и няма да се случи drag и hold on element
 
-        const touch = event.touches[0];
-        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        const touch = event.touches[0]; // съдържа в себе си информация за натиснатото място по екрана clientX, clientY координати, pageX, pageY и тн.
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY); // 
+        // bellow - under the finger, като проследява цялото движение и всеки един елемент по който finger-a минава
         
         if(!elementBelow) return;
 
