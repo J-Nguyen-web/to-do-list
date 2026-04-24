@@ -196,7 +196,11 @@ function newTask(){
 function renderTasks(text, done) {
     const li = document.createElement('li');
     const actions = document.createElement('div')
-    actions.classList.add('actions')
+    actions.classList.add('actions');
+
+    const dragHandle = document.createElement('span');
+    dragHandle.classList.add('drag-handle');
+    dragHandle.textContent = '☰'
 
     const span = document.createElement('span');
     const toggleBtn = document.createElement('button');
@@ -232,8 +236,9 @@ function renderTasks(text, done) {
 
     actions.appendChild(toggleBtn)
     actions.appendChild(deleteBtn);
+    li.appendChild(dragHandle);
     li.appendChild(span);
-    li.appendChild(actions)
+    li.appendChild(actions);
     taskList.appendChild(li);
 
     enableDragDrop(li) // enables dragging
@@ -294,8 +299,23 @@ function autoScroll(pointerY) {
 //прикрепяне на ивента към всеки task
 function enableDragDrop(li) {
 
+    const handle = li.querySelector('.drag-handle');
+
+        handle.addEventListener('dragstart', true);
+
+        handle.addEventListener('dragstart', () => {
+            draggedItem = li;
+            li.classList.add('dragging');
+        })
+
+        handle.addEventListener('dragend', () => {
+            li.classList.remove('dragging'); 
+            draggedItem = null;
+            saveTask();
+        })
+
     // === TOUCH (mobile) === //
-    li.addEventListener('touchstart', () => {
+    handle.ddEventListener('touchstart', () => {
         holdTimeout = setTimeout(() => {
             isDragging = true;
             draggedItem = li;
@@ -307,7 +327,7 @@ function enableDragDrop(li) {
         }, 300) // hold time
     });
 
-    li.addEventListener('touchmove', (event) => {
+    handle.ddEventListener('touchmove', (event) => {
 
         if( !isDragging) return;
 
@@ -319,18 +339,21 @@ function enableDragDrop(li) {
         
         if(!elementBelow) return;
 
-        const targetLi = elementBelow.closest('li');
+        const targetLi = elementBelow.closest('li'); // closest() is a DOM method it targets the closest element that is  in the ('element')
         if(targetLi && targetLi !== draggedItem) {
-            const rect = targetLi.getBoundingClientRect();
-            const isBelow = touch.clientY > rect.top + rect.height / 2;
+            const rect = targetLi.getBoundingClientRect(); // native DOM method - връща обект със позицията и големината на обекта във видимия екран
+            const isBelow = touch.clientY > rect.top + rect.height / 2; // понеже е сравнение знак за по-голямо,
+            // след изчислеянията връща true - finger is in bottom half, false - on top half
+            // clientY - Y position, rect.top -top of the element, rect.height/2 - middle of the element
 
             taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
+            // в елемента taskList да се постави draggedItem преди target.nextSibling или targetLi
         }
 
         autoScroll(touch.clientY)
     });
 
-    li.addEventListener('touchend', () => {
+    handle.ddEventListener('touchend', () => {
         clearTimeout(holdTimeout);
 
         if(isDragging) {
@@ -342,39 +365,43 @@ function enableDragDrop(li) {
         isDragging = false;
     });
 
-    li.addEventListener('touchcancel', () => {
+    handle.ddEventListener('touchcancel', () => {
         clearTimeout(holdTimeout);
         isDragging = false;
     })
 
-    // === MOUSE (Decstop) === //
-    li.setAttribute('draggable', true);
+    // // === MOUSE (Decstop before the drag handle) === //
+    // li.setAttribute('draggable', true);
 
-    li.addEventListener('dragstart', () => {
-        draggedItem = li;
-        li.classList.add('dragging');
-    });
+    // li.addEventListener('dragstart', () => {
+    //     draggedItem = li;
+    //     li.classList.add('dragging');
+    // });
 
-    li.addEventListener('dragend', () => {
-        li.classList.remove('dragging');
-        draggedItem = null;
-        saveTask();
-    });
+    // li.addEventListener('dragend', () => {
+    //     li.classList.remove('dragging');
+    //     draggedItem = null;
+    //     saveTask();
+    // });
 
 }
 
 // === Helper for mouse drag === //
-function getDragAfterElement(container, y) {
+function getDragAfterElement(container, y) { // container is taskList, y - event.clientY
     const draggableElements = [...container.querySelectorAll('li:not(.dragging)')];
 
-    return draggableElements.reduce((closest, child) => {
+    return draggableElements.reduce((closest, child) => { // child is each Li from the list,
+        // reduce loops through all, cloesest is accumulator (current best match), child current item, намира кой елемент е най-близо над cursor-a
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
 
-        if(offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
+        if(offset < 0 && offset > closest.offset) { // offset < - element is Below cursor midpoint (valid candidate)
+            // offset > closest.offset - closer than the previous best
+            return { offset: offset, element: child }; // offset stores how close it is, element store which element it is
         } else {
             return closest;
         }
-        }, { offset: Number.NEGATIVE_INFINITY}).element
+        }, { offset: Number.NEGATIVE_INFINITY}).element // worst possible value
+        // ensures first valid element replaces it
+        // .element extract just the DOM node, after reduce we get { offset, element}
 }

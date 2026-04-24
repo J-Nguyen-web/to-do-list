@@ -150,6 +150,21 @@ li.placeholder {
     background: transparent;
 }
 
+.drag-hadnle {
+    cursor: grad;
+    font-size: 18px;
+    margin-right: 8px;
+    user-select: none;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+li.dragging {
+    opacity: 0.6;
+}
+
 h2 {
     text-align: center;
     color: #d86b82;
