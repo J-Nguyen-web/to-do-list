@@ -301,6 +301,8 @@ function enableDragDrop(li) {
 
     const handle = li.querySelector('.drag-handle');
 
+        handle.setAttribute('draggable', true);
+
         handle.addEventListener('dragstart', () => {
             draggedItem = li;
             li.classList.add('dragging');
@@ -370,17 +372,6 @@ function enableDragDrop(li) {
 
     // === MOUSE (Decstop before the drag handle) === //
     handle.setAttribute('draggable', true);
-
-    li.addEventListener('dragstart', () => {
-        draggedItem = li;
-        li.classList.add('dragging');
-    });
-
-    li.addEventListener('dragend', () => {
-        li.classList.remove('dragging');
-        draggedItem = null;
-        saveTask();
-    });
 
 }
 
