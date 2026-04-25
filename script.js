@@ -7,6 +7,14 @@ const newCategoryBtn = document.getElementById('insertCategoryBtn');
 let currentCategory = 'Daily';
 
 window.onload = () => {
+    const data = {
+        localStorage: localStorage,
+        origin: location.origin,
+        href: location.href,
+        storageKeys: Object.keys(localStorage),
+        tasks: localStorage.getItem('tasks'),
+        categories: localStorage.getItem('categories'),
+    }
     loadSavedCategories();
     loadTasks(currentCategory);
     document.body.classList.add(currentCategory.toLowerCase() + '-theme');
@@ -14,7 +22,7 @@ window.onload = () => {
     console.log('CATEGORIES-',localStorage.getItem('categories'));
     document.body.insertAdjacentHTML(
         'afterbegin',
-        `<pre style="position:fixed;top:0;left:0;z-index:9999;background:black;color:white;padding:8px;max-height:40vh;overflow:auto;">${JSON.stringify(localStorage,null,2)}</pre>`
+        `<pre style="position:fixed;top:0;left:0;z-index:9999;background:black;color:white;padding:8px;max-height:40vh;overflow:auto;">${JSON.stringify(data,null,2)}</pre>`
     );
     // localStorage.removeItem('categories')
     // localStorage.removeItem('tasks')
