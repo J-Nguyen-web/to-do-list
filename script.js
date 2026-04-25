@@ -5,6 +5,9 @@ const categoryItems = document.querySelectorAll('.category-item');
 const newCategoryBtn = document.getElementById('insertCategoryBtn');
 
 let currentCategory = 'Daily';
+let draggedItem = null;
+let isDragging = false;
+let holdTimeout;
 
 window.onload = () => {
     loadSavedCategories();
@@ -15,12 +18,11 @@ window.onload = () => {
     // console.log(localStorage)
 }
 
-let draggedItem = null;
-let isDragging = false;
-let holdTimeout;
     
 taskList.addEventListener('dragover', (event) => {
     event.preventDefault();
+
+    if(!draggedItem) return;
 
     const afterElement = getDragAfterElement(taskList, event.clientY);
     
@@ -40,9 +42,11 @@ categoryItems.forEach(item => {
     item.addEventListener('click', () => {
         categoryItems.forEach(i => i.classList.remove('active'));
         document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+
         item.classList.add('active');
         currentCategory = item.dataset.category;
         categoryTitle.textContent = item.textContent;
+
         loadTasks(currentCategory);
         
         //themes
@@ -182,6 +186,7 @@ function removeCategory(categoryName, categoryItem){
     }
 }
 
+// === TASKS === //
 function newTask(){
     const taskText = taskInput.value.trim();
     if(taskText === '') {
@@ -195,19 +200,21 @@ function newTask(){
 
 function renderTasks(text, done) {
     const li = document.createElement('li');
+
+    const dragHandle = document.createElement('span');
+    dragHandle.className = 'drag-handle';
+    dragHandle.textContent = '☰';
+
+    const span = document.createElement('span');
+    span.textContent = text;
+
     const actions = document.createElement('div')
     actions.classList.add('actions');
 
-    const dragHandle = document.createElement('span');
-    dragHandle.classList.add('drag-handle');
-    dragHandle.textContent = '☰'
-
-    const span = document.createElement('span');
     const toggleBtn = document.createElement('button');
     toggleBtn.classList.add('toggle')
     toggleBtn.textContent = 'Done'
     
-    span.textContent = text;
 
     if(done) {        
         li.classList.add('done');
@@ -234,11 +241,8 @@ function renderTasks(text, done) {
         }
     }
 
-    actions.appendChild(toggleBtn)
-    actions.appendChild(deleteBtn);
-    li.appendChild(dragHandle);
-    li.appendChild(span);
-    li.appendChild(actions);
+    actions.appendChild(toggleBtn, deleteBtn)
+    li.appendChild(dragHandle, span, actions);
     taskList.appendChild(li);
 
     enableDragDrop(li) // enables dragging
@@ -282,19 +286,6 @@ taskInput.addEventListener('keypress',function(event){
         newTask();
     }
 });
-
-function autoScroll(pointerY) {
-    const threshold = 80; // разстояние от екрана
-    const speed = 8;
-
-    const viewportHeight = window.innerHeight;
-
-    if( pointerY < threshold ) {
-        window.scrollBy(0, -speed);
-    } else if (pointerY > viewportHeight - threshold) {
-        window.scrollBy(0, speed);
-    }
-}
 
 //прикрепяне на ивента към всеки task
 function enableDragDrop(li) {
@@ -350,7 +341,6 @@ function enableDragDrop(li) {
             // в елемента taskList да се постави draggedItem преди target.nextSibling или targetLi
         }
 
-        autoScroll(touch.clientY)
     });
 
     handle.addEventListener('touchend', () => {
@@ -364,14 +354,6 @@ function enableDragDrop(li) {
 
         isDragging = false;
     });
-
-    handle.addEventListener('touchcancel', () => {
-        clearTimeout(holdTimeout);
-        isDragging = false;
-    })
-
-    // === MOUSE (Decstop before the drag handle) === //
-    handle.setAttribute('draggable', true);
 
 }
 
