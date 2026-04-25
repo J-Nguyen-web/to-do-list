@@ -290,7 +290,7 @@ function autoScroll(pointerY) {
     const viewportHeight = window.innerHeight;
 
     if( pointerY < threshold ) {
-        windows.scrollBy(0, -speed);
+        window.scrollBy(0, -speed);
     } else if (pointerY > viewportHeight - threshold) {
         window.scrollBy(0, speed);
     }
@@ -300,8 +300,6 @@ function autoScroll(pointerY) {
 function enableDragDrop(li) {
 
     const handle = li.querySelector('.drag-handle');
-
-        handle.addEventListener('dragstart', true);
 
         handle.addEventListener('dragstart', () => {
             draggedItem = li;
@@ -315,7 +313,7 @@ function enableDragDrop(li) {
         })
 
     // === TOUCH (mobile) === //
-    handle.ddEventListener('touchstart', () => {
+    handle.addEventListener('touchstart', () => {
         holdTimeout = setTimeout(() => {
             isDragging = true;
             draggedItem = li;
@@ -327,7 +325,7 @@ function enableDragDrop(li) {
         }, 300) // hold time
     });
 
-    handle.ddEventListener('touchmove', (event) => {
+    handle.addEventListener('touchmove', (event) => {
 
         if( !isDragging) return;
 
@@ -353,7 +351,7 @@ function enableDragDrop(li) {
         autoScroll(touch.clientY)
     });
 
-    handle.ddEventListener('touchend', () => {
+    handle.addEventListener('touchend', () => {
         clearTimeout(holdTimeout);
 
         if(isDragging) {
@@ -365,24 +363,24 @@ function enableDragDrop(li) {
         isDragging = false;
     });
 
-    handle.ddEventListener('touchcancel', () => {
+    handle.addEventListener('touchcancel', () => {
         clearTimeout(holdTimeout);
         isDragging = false;
     })
 
-    // // === MOUSE (Decstop before the drag handle) === //
-    // li.setAttribute('draggable', true);
+    // === MOUSE (Decstop before the drag handle) === //
+    handle.setAttribute('draggable', true);
 
-    // li.addEventListener('dragstart', () => {
-    //     draggedItem = li;
-    //     li.classList.add('dragging');
-    // });
+    li.addEventListener('dragstart', () => {
+        draggedItem = li;
+        li.classList.add('dragging');
+    });
 
-    // li.addEventListener('dragend', () => {
-    //     li.classList.remove('dragging');
-    //     draggedItem = null;
-    //     saveTask();
-    // });
+    li.addEventListener('dragend', () => {
+        li.classList.remove('dragging');
+        draggedItem = null;
+        saveTask();
+    });
 
 }
 
