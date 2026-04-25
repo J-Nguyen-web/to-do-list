@@ -12,7 +12,7 @@ let holdTimeout;
 window.onload = () => {
     loadSavedCategories();
     loadTasks(currentCategory);
-    console.log(localStorage.getItem('tasks'));
+    console.log(localStorage.getItem('tasks')); 
     document.body.classList.add(currentCategory.toLowerCase() + '-theme');
     // localStorage.removeItem('categories')
     // localStorage.removeItem('tasks')
@@ -270,6 +270,8 @@ function saveTask() {
 }
 
 function loadTasks(category) {
+    console.log(localStorage.getItem('tasks'));
+
     taskList.innerHTML = '';
     let tasks = {};
     try {
