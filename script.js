@@ -5,31 +5,42 @@ const categoryItems = document.querySelectorAll('.category-item');
 const newCategoryBtn = document.getElementById('insertCategoryBtn');
 
 let currentCategory = 'Daily';
+let draggedItem = null;
 
-window.onload = () => {
-    const data = {
-        localStorage: localStorage,
-        origin: location.origin,
-        href: location.href,
-        storageKeys: Object.keys(localStorage),
-        tasks: localStorage.getItem('tasks'),
-        categories: localStorage.getItem('categories'),
+// === ERROR UI === //
+function showError (message) {
+    let box = document.getElementById('errorBox');
+
+    if(!box) {
+        box = document.createElement('div');
+        box.id = 'errorBox';
+        box.style.position = 'fixed';
+        box.style.top = '0';
+        box.style.left = '0';
+        box.style.width = '100%';
+        box.style.background = '#b70303';
+        box.style.color = 'white';
+        box.style.padding = '8px';
+        box.style.zIndex = '9999';
+        box.style.fontSize = '14px';
+        document.body.appendChild(box);
     }
+}
+
+//=== STORAGE ===//
+
+const STORAGE_KEYS = {
+    TASKS: 'tasks',
+    CATEGORIES: 'categories'
+};
+
+//=== INIT ===//
+window.onload = () => {
     loadSavedCategories();
     loadTasks(currentCategory);
     document.body.classList.add(currentCategory.toLowerCase() + '-theme');
-    console.log('TASKS-',localStorage.getItem('tasks'))
-    console.log('CATEGORIES-',localStorage.getItem('categories'));
-    document.body.insertAdjacentHTML(
-        'afterbegin',
-        `<pre style="position:fixed;top:0;left:0;z-index:9999;background:black;color:white;padding:8px;max-height:40vh;overflow:auto;">${JSON.stringify(data,null,2)}</pre>`
-    );
-    // localStorage.removeItem('categories')
-    // localStorage.removeItem('tasks')
-    // console.log(localStorage)
 }
 
-let draggedItem = null;
 let isDragging = false;
 let holdTimeout;
     
@@ -55,18 +66,21 @@ categoryItems.forEach(item => {
         categoryItems.forEach(i => i.classList.remove('active'));
         document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
+
         currentCategory = item.dataset.category;
         categoryTitle.textContent = item.textContent;
+
         loadTasks(currentCategory);
         
         //themes
-        document.body.classList.remove('daily-theme','shopping-theme', 'work-theme', 'custom-theme')
+        document.body.className = '';
+        // document.body.classList.remove('daily-theme','shopping-theme', 'work-theme', 'custom-theme')
         document.body.classList.add(currentCategory.toLowerCase() + '-theme')
 
-        window.scrollTo ({
-            top: 0,
-            behavior: "smooth",
-        });
+        // window.scrollTo ({
+        //     top: 0,
+        //     behavior: "smooth",
+        // });
 
         // if(!isMobile){
         //     taskInput.focus();
@@ -196,6 +210,7 @@ function removeCategory(categoryName, categoryItem){
     }
 }
 
+// === TASK CREATE === //
 function newTask(){
     const taskText = taskInput.value.trim();
     if(taskText === '') {
@@ -207,6 +222,13 @@ function newTask(){
     taskInput.value = '';
 }
 
+taskInput.addEventListener('keypress',function(event){
+    if(event.key === 'Enter'){
+        newTask();
+    }
+});
+
+// === RENDER TASK === //
 function renderTasks(text, done) {
     const li = document.createElement('li');
     const actions = document.createElement('div')
@@ -285,12 +307,6 @@ function loadTasks(category) {
     const categoryTasks = Array.isArray (tasks[category]) ? tasks[category] : [];
     categoryTasks.forEach(task => renderTasks(task.text, task.done))
 }
-
-taskInput.addEventListener('keypress',function(event){
-    if(event.key === 'Enter'){
-        newTask();
-    }
-});
 
 //прикрепяне на ивента към всеки task
 function enableDragDrop(li) {
