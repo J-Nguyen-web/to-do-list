@@ -34,6 +34,28 @@ const STORAGE_KEYS = {
     CATEGORIES: 'categories'
 };
 
+function safeRead(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        if(!raw) return fallback;
+
+        const parsed = JSON.parse(raw);
+        if (typeof parsed !== 'object' || parsed === null) return fallback;
+
+        return parsed;
+    } catch {
+        return fallback;
+    }
+}
+
+function safeWrite(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+        console.warn('Safe failed:', error)
+    }
+}
+
 //=== INIT ===//
 window.onload = () => {
     loadSavedCategories();
@@ -43,24 +65,13 @@ window.onload = () => {
 
 let isDragging = false;
 let holdTimeout;
-    
-taskList.addEventListener('dragover', (event) => {
-    event.preventDefault();
-
-    const afterElement = getDragAfterElement(taskList, event.clientY);
-    
-    if (afterElement == null) {
-        taskList.appendChild(draggedItem);
-    } else {
-        taskList.insertBefore(draggedItem, afterElement);
-    }
-})
 
 // function that chech the type of the device
 function isMobile(){
     return window.matchMedia('(pointer: coarse)').matches;
 }
 
+// === CATEGORY SWITCH === //
 categoryItems.forEach(item => {
     item.addEventListener('click', () => {
         categoryItems.forEach(i => i.classList.remove('active'));
@@ -88,6 +99,220 @@ categoryItems.forEach(item => {
         
     })
 });
+
+// === SAVE - LOAD === //
+function saveTask() {
+    const tasks = safeRead(STORAGE_KEYS.TASKS, {}) ;
+
+    const currentTasks = [];
+
+    taskList.querySelectorAll('li').forEach( li => {
+        currentTasks.push({
+            text: li.querySelector('span').textContent,
+            done: li.classList.contains('done')
+        });
+    });
+
+    tasks[currentCategory] = currentTasks;
+
+    safeWrite(STORAGE_KEYS.TASKS, tasks)
+}
+
+function loadTasks(category) {
+    taskList.innerHTML = '';
+    let tasks = safeRead(STORAGE_KEYS.TASKS, {});
+    const list = Array.isArray(tasks[category]) ? tasks[category] : [];
+    
+    list.forEach(task => renderTasks(task.text, task.done));
+}
+// === TASK CREATE === //
+function newTask(){
+    const taskText = taskInput.value.trim();
+    
+    if(taskText === '') {
+        alert('Please enter a task!')
+        return;
+    }
+    renderTasks(taskText, false);
+    saveTask();
+    taskInput.value = '';
+}
+
+taskInput.addEventListener('keypress',function(event){
+    if(event.key === 'Enter'){
+        newTask();
+    }
+});
+
+// === RENDER TASK === //
+function renderTasks(text, done) {
+    const li = document.createElement('li');
+
+    // const actions = document.createElement('div')
+    // actions.classList.add('actions')
+    // const span = document.createElement('span');
+    // const toggleBtn = document.createElement('button');
+    // toggleBtn.classList.add('toggle')
+    // toggleBtn.textContent = 'Done'
+    // span.textContent = text;
+    // if(done) {        
+    //     li.classList.add('done');
+    //     toggleBtn.textContent = 'Undone'
+    // }
+    // toggleBtn.onclick = () => {
+    //     li.classList.toggle('done');
+    //     toggleBtn.textContent = li.classList.contains('done')
+    //         ? 'Undone'
+    //         : 'Done';        
+    //     saveTask();}
+    // const deleteBtn = document.createElement('button');
+    // deleteBtn.textContent = 'X';
+    // deleteBtn.onclick = () => {
+    //     const confrimDelTask = confirm(`Delete task?`)
+    //     if(confrimDelTask) {
+    //         li.remove();
+    //     saveTask(); }}
+    // actions.appendChild(toggleBtn)
+    // actions.appendChild(deleteBtn);
+    // li.appendChild(span);
+    // li.appendChild(actions)
+
+    li.innerHTML = `
+    <span class="drag-handle">--</span>
+    <span class="task-text">${text}</span>
+    <div class="actions">
+        <button class="toggle">${done ? 'Undone' : 'Done'}</button>
+        <button class="delete">X</button>
+    </div>
+    `;
+
+    if(done) li.classList.add('done');
+
+    const toggleBtn= li.querySelector('.toggle');
+    const deleteBtn = li.querySelector('.delete');
+
+    toggleBtn.onclick = () => {
+        li.classList.toggle('done');
+        toggleBtn.textContent = li.classList.contains('done')
+            ? 'Undone'
+            : 'Done';        
+        saveTask();
+    }
+
+    deleteBtn.onclick = () => {
+        if(confirm(`Delete task?`)) {
+            li.remove();
+            saveTask(); }
+    }
+
+    li.style.transition = 'all 0.3s ease'
+
+    taskList.appendChild(li);
+    enableDragDrop(li) // enables dragging
+}
+
+// === DRAG & TOUCH === //
+function enableDragDrop(li) {
+
+    const handle = li.querySelector('.drag-handle');
+
+    handle.setAttribute('draggable', true);
+
+    handle.addEventListener('dragstart', () => {
+        draggedItem = li;
+        li.classList.add('dragging');
+    });
+
+    li.addEventListener('dragend', () => {
+        li.classList.remove('dragging');
+        draggedItem = null;
+        saveTask();
+    });
+
+    // === TOUCH (mobile) === //
+
+    let holdTimeout;
+    let isDragging = false;
+
+    li.addEventListener('touchstart', () => {
+        holdTimeout = setTimeout(() => {
+            isDragging = true;
+            draggedItem = li;
+            li.classList.add('dragging');
+
+            // само определени devices поддържат тази вибрация
+            if (navigator.vibrate) navigator.vibrate(8)
+
+        }, 300) // hold time
+    });
+
+    li.addEventListener('touchmove', (event) => {
+
+        if( !isDragging) return;
+
+        event.preventDefault();
+
+        const touch = event.touches[0];
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        if(!elementBelow) return;
+        const targetLi = elementBelow?.closest('li');
+        
+        if(targetLi && targetLi !== draggedItem) {
+            const rect = targetLi.getBoundingClientRect();
+            const isBelow = touch.clientY > rect.top + rect.height / 2;
+
+            taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
+        }
+
+        autoScroll(touch.clientY)
+    });
+
+    li.addEventListener('touchend', () => {
+        clearTimeout(holdTimeout);
+
+        if(isDragging) {
+            li.classList.remove('dragging');
+            draggedItem = null;
+            saveTask();
+        }
+
+        isDragging = false;
+    });
+
+    // li.addEventListener('touchcancel', () => {
+    //     clearTimeout(holdTimeout);
+    //     isDragging = false;
+    // })
+
+}
+
+// === Helper for mouse drag === //
+taskList.addEventListener('dragover', (event) => {
+    event.preventDefault();
+
+    const afterElement = getDragAfterElement(taskList, event.clientY);
+    
+    if (!afterElement) {
+        taskList.appendChild(draggedItem);
+    } else {
+        taskList.insertBefore(draggedItem, afterElement);
+    }
+})
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('li:not(.dragging)')];
+
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+
+        if(offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+        }, { offset: Number.NEGATIVE_INFINITY}).element
+}
 
 // = CREATE CATEGORY =
 function createCategoryElement (categoryName, isCustom = false) {
@@ -208,189 +433,4 @@ function removeCategory(categoryName, categoryItem){
         dailyCategory.classList.add('active');
 
     }
-}
-
-// === TASK CREATE === //
-function newTask(){
-    const taskText = taskInput.value.trim();
-    if(taskText === '') {
-        alert('Please enter a task!')
-        return;
-    }
-    renderTasks(taskText, false);
-    saveTask();
-    taskInput.value = '';
-}
-
-taskInput.addEventListener('keypress',function(event){
-    if(event.key === 'Enter'){
-        newTask();
-    }
-});
-
-// === RENDER TASK === //
-function renderTasks(text, done) {
-    const li = document.createElement('li');
-    const actions = document.createElement('div')
-    actions.classList.add('actions')
-
-    const span = document.createElement('span');
-    const toggleBtn = document.createElement('button');
-    toggleBtn.classList.add('toggle')
-    toggleBtn.textContent = 'Done'
-    
-    span.textContent = text;
-
-    if(done) {        
-        li.classList.add('done');
-        toggleBtn.textContent = 'Undone'
-    }
-
-    toggleBtn.onclick = () => {
-        li.classList.toggle('done');
-
-        toggleBtn.textContent = li.classList.contains('done')
-            ? 'Undone'
-            : 'Done';        
-        
-        saveTask();
-    }
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'X';
-    deleteBtn.onclick = () => {
-        const confrimDelTask = confirm(`Delete task?`)
-        if(confrimDelTask) {
-            li.remove();
-        saveTask();
-        }
-    }
-
-    actions.appendChild(toggleBtn)
-    actions.appendChild(deleteBtn);
-    li.appendChild(span);
-    li.appendChild(actions)
-    taskList.appendChild(li);
-
-    enableDragDrop(li) // enables dragging
-}
-
-function saveTask() {
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || {} ;
-    const currentTasks = [];
-
-    taskList.querySelectorAll('li').forEach( li => {
-        currentTasks.push({
-            text: li.querySelector('span').textContent,
-            done: li.classList.contains('done')
-        });
-    });
-
-    tasks[currentCategory] = currentTasks;
-    try {
-        localStorage.setItem('tasks',JSON.stringify(tasks))
-    } catch (error) {
-        console.warn('LocalStorage save failed:', error)
-    }
-    
-}
-
-function loadTasks(category) {
-    taskList.innerHTML = '';
-    let tasks = {};
-    try {
-        tasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    } catch (error) {
-        tasks = {};
-    }
-    
-    const categoryTasks = Array.isArray (tasks[category]) ? tasks[category] : [];
-    categoryTasks.forEach(task => renderTasks(task.text, task.done))
-}
-
-//прикрепяне на ивента към всеки task
-function enableDragDrop(li) {
-
-    // === TOUCH (mobile) === //
-    li.addEventListener('touchstart', () => {
-        holdTimeout = setTimeout(() => {
-            isDragging = true;
-            draggedItem = li;
-            li.classList.add('dragging');
-
-            // само определени devices поддържат тази вибрация
-            if (navigator.vibrate) navigator.vibrate(8)
-
-        }, 300) // hold time
-    });
-
-    li.addEventListener('touchmove', (event) => {
-
-        if( !isDragging) return;
-
-        event.preventDefault();
-
-        const touch = event.touches[0];
-        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-        
-        if(!elementBelow) return;
-
-        const targetLi = elementBelow.closest('li');
-        if(targetLi && targetLi !== draggedItem) {
-            const rect = targetLi.getBoundingClientRect();
-            const isBelow = touch.clientY > rect.top + rect.height / 2;
-
-            taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
-        }
-
-        autoScroll(touch.clientY)
-    });
-
-    li.addEventListener('touchend', () => {
-        clearTimeout(holdTimeout);
-
-        if(isDragging) {
-            li.classList.remove('dragging');
-            draggedItem = null;
-            saveTask();
-        }
-
-        isDragging = false;
-    });
-
-    li.addEventListener('touchcancel', () => {
-        clearTimeout(holdTimeout);
-        isDragging = false;
-    })
-
-    // === MOUSE (Decstop) === //
-    li.setAttribute('draggable', true);
-
-    li.addEventListener('dragstart', () => {
-        draggedItem = li;
-        li.classList.add('dragging');
-    });
-
-    li.addEventListener('dragend', () => {
-        li.classList.remove('dragging');
-        draggedItem = null;
-        saveTask();
-    });
-
-}
-
-// === Helper for mouse drag === //
-function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('li:not(.dragging)')];
-
-    return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-
-        if(offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-        } else {
-            return closest;
-        }
-        }, { offset: Number.NEGATIVE_INFINITY}).element
 }
