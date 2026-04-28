@@ -178,7 +178,7 @@ function renderTasks(text, done) {
     // li.appendChild(actions)
 
     li.innerHTML = `
-    <span class="drag-handle">--</span>
+    <span class="drag-handle">⥮</span>
     <span class="task-text">${text}</span>
     <div class="actions">
         <button class="toggle">${done ? 'Undone' : 'Done'}</button>
@@ -367,20 +367,33 @@ function createCategoryElement (categoryName, isCustom = false) {
     return customCategory;
 }
 
+// === CATEGORIES === //
 function loadSavedCategories() {
-    let savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    let savedCategories = safeRead(STORAGE_KEYS.CATEGORIES, []) ;
     const categoryBar = document.querySelector('.sidebar ul');
     
     savedCategories.forEach( category => {
-        const customCategory = createCategoryElement(category, true);
+        // const customCategory = createCategoryElement(category, true);
+        // categoryBar.appendChild(customCategory);
+        const customCategory = document.createElement('li');
+        customCategory.classList.add('category-item');
+        customCategory.dataset.category = category;
+        customCategory.textContent = category;
+
+        customCategory.onclick = () => {
+            currentCategory = category;
+            categoryTitle.textContent = category;
+            loadTasks(category);
+        };
+
         categoryBar.appendChild(customCategory);
     });
 }
 newCategoryBtn.addEventListener('click', () => {
-    const newCategory = prompt('Enter a name for the new category:');
+    const newCategory = prompt('Enter a name for the new category:')?.trim();
     if(!newCategory) return;
     
-    const insertedCategory = newCategory.trim();
+    const insertedCategory = safeRead(STORAGE_KEYS.CATEGORIES, []);
     if (insertedCategory === '') return alert('Category name cannot be empty');
 
     // check for duplicates
@@ -389,23 +402,32 @@ newCategoryBtn.addEventListener('click', () => {
     );
 
     if(exists) {
-        alert('that category already exists!');
+        alert('That category already exists!');
         return;
     }
 
-    // Save custom category to the list with all categories in LocalStorage
-    const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
-    savedCategories.push(insertedCategory);
-    localStorage.setItem('categories', JSON.stringify(savedCategories));
-    // loadSavedCategories();
-    const categoryBar = document.querySelector('.sidebar ul');
-    const newCategoryElement = createCategoryElement(insertedCategory, true)
-    categoryBar.appendChild(newCategoryElement);
+    insertedCategory.push(newCategory);
+    safeWrite(STORAGE_KEYS.CATEGORIES, insertedCategory);
 
-    // initialize empty task array from this category
-    const allTasks = JSON.parse(localStorage.getItem('tasks')) || {};
-    allTasks[insertedCategory] = [];
-    localStorage.setItem('tasks', JSON.stringify(allTasks));
+    const tasks = safeRead(STORAGE_KEYS.TASKS, {});
+    tasks[newCategory] = []
+    safeWrite(STORAGE_KEYS.TASKS, tasks);
+
+    loadSavedCategories();
+
+    // // Save custom category to the list with all categories in LocalStorage
+    // const savedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    // savedCategories.push(insertedCategory);
+    // localStorage.setItem('categories', JSON.stringify(savedCategories));
+    // // loadSavedCategories();
+    // const categoryBar = document.querySelector('.sidebar ul');
+    // const newCategoryElement = createCategoryElement(insertedCategory, true)
+    // categoryBar.appendChild(newCategoryElement);
+
+    // // initialize empty task array from this category
+    // const allTasks = JSON.parse(localStorage.getItem('tasks')) || {};
+    // allTasks[insertedCategory] = [];
+    // localStorage.setItem('tasks', JSON.stringify(allTasks));
 });
 
 // = REMOVE CUSTOM CATEGORY =
