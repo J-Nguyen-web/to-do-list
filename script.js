@@ -25,6 +25,14 @@ function showError (message) {
         box.style.fontSize = '14px';
         document.body.appendChild(box);
     }
+
+    box.textContent = message;
+
+    clearTimeout(box.hideTimeout);
+
+    box.hideTimeout = setTimeout(() => {
+        box.remove
+    }, 3000);
 }
 
 //=== STORAGE ===//
@@ -93,7 +101,7 @@ categoryItems.forEach(item => {
         //     behavior: "smooth",
         // });
 
-        // if(!isMobile){
+        // if(!isMobile()){
         //     taskInput.focus();
         // }
         
@@ -108,7 +116,7 @@ function saveTask() {
 
     taskList.querySelectorAll('li').forEach( li => {
         currentTasks.push({
-            text: li.querySelector('span').textContent,
+            text: li.querySelector('.task-text').textContent,
             done: li.classList.contains('done')
         });
     });
@@ -148,66 +156,62 @@ taskInput.addEventListener('keypress',function(event){
 function renderTasks(text, done) {
     const li = document.createElement('li');
 
-    // const actions = document.createElement('div')
-    // actions.classList.add('actions')
-    // const span = document.createElement('span');
-    // const toggleBtn = document.createElement('button');
-    // toggleBtn.classList.add('toggle')
-    // toggleBtn.textContent = 'Done'
-    // span.textContent = text;
-    // if(done) {        
-    //     li.classList.add('done');
-    //     toggleBtn.textContent = 'Undone'
-    // }
-    // toggleBtn.onclick = () => {
-    //     li.classList.toggle('done');
-    //     toggleBtn.textContent = li.classList.contains('done')
-    //         ? 'Undone'
-    //         : 'Done';        
-    //     saveTask();}
-    // const deleteBtn = document.createElement('button');
-    // deleteBtn.textContent = 'X';
-    // deleteBtn.onclick = () => {
-    //     const confrimDelTask = confirm(`Delete task?`)
-    //     if(confrimDelTask) {
-    //         li.remove();
-    //     saveTask(); }}
-    // actions.appendChild(toggleBtn)
-    // actions.appendChild(deleteBtn);
-    // li.appendChild(span);
-    // li.appendChild(actions)
+    // drag handle
+    const dragHandle = document.createElement('span');
+    dragHandle.classList.add('drag-handle');
+    dragHandle.textContent = '⥮';
 
-    li.innerHTML = `
-    <span class="drag-handle">⥮</span>
-    <span class="task-text">${text}</span>
-    <div class="actions">
-        <button class="toggle">${done ? 'Undone' : 'Done'}</button>
-        <button class="delete">X</button>
-    </div>
-    `;
+    // task text
+    const textSpan = document.createElement('span');
+    textSpan.classList.add('task-text');
+    textSpan.textContent = text;
 
+    // action container
+    const actions = document.createElement('div')
+    actions.classList.add('actions')
+
+    // toggle button
+    const toggleBtn = document.createElement('button');
+    toggleBtn.classList.add('toggle');
+    toggleBtn.textContent = done ? 'Undone' : 'Done';
+
+    // delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('delete');
+    deleteBtn.textContent = 'X';
+
+    // done state
     if(done) li.classList.add('done');
 
-    const toggleBtn= li.querySelector('.toggle');
-    const deleteBtn = li.querySelector('.delete');
-
+    // toggle logic
     toggleBtn.onclick = () => {
         li.classList.toggle('done');
         toggleBtn.textContent = li.classList.contains('done')
             ? 'Undone'
             : 'Done';        
         saveTask();
-    }
+    };
 
+    // delete logic
     deleteBtn.onclick = () => {
         if(confirm(`Delete task?`)) {
             li.remove();
             saveTask(); }
     }
 
+
+    // build structure
+    actions.appendChild(toggleBtn)
+    actions.appendChild(deleteBtn);
+
+    li.appendChild(dragHandle);
+    li.appendChild(textSpan);
+    li.appendChild(actions);
+
     li.style.transition = 'all 0.3s ease'
 
     taskList.appendChild(li);
+
     enableDragDrop(li) // enables dragging
 }
 
@@ -264,7 +268,7 @@ function enableDragDrop(li) {
             taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
         }
 
-        autoScroll(touch.clientY)
+        // autoScroll(touch.clientY)
     });
 
     li.addEventListener('touchend', () => {
@@ -279,12 +283,18 @@ function enableDragDrop(li) {
         isDragging = false;
     });
 
-    // li.addEventListener('touchcancel', () => {
-    //     clearTimeout(holdTimeout);
-    //     isDragging = false;
-    // })
+    li.addEventListener('touchcancel', () => {
+        clearTimeout(holdTimeout);
+
+        li.classList.remove('dragging');
+
+        draggedItem = null;
+        isDragging = false;
+    })
 
 }
+
+
 
 // === Helper for mouse drag === //
 taskList.addEventListener('dragover', (event) => {
@@ -360,7 +370,7 @@ function createCategoryElement (categoryName, isCustom = false) {
             behavior: "smooth", // it will drag it slowly instead of like reload it immediatly
             });
 
-        // if(!isMobile){
+        // if(!isMobile()){
         //     taskInput.focus();
         // } // the class attribute taskInput will be focused
     });
@@ -371,34 +381,28 @@ function createCategoryElement (categoryName, isCustom = false) {
 function loadSavedCategories() {
     let savedCategories = safeRead(STORAGE_KEYS.CATEGORIES, []) ;
     const categoryBar = document.querySelector('.sidebar ul');
+
+    // remove old custom categories
+    categoryBar.querySelectorAll('.custom-category').forEach(el => el.remove())
     
     savedCategories.forEach( category => {
-        // const customCategory = createCategoryElement(category, true);
-        // categoryBar.appendChild(customCategory);
-        const customCategory = document.createElement('li');
-        customCategory.classList.add('category-item');
-        customCategory.dataset.category = category;
-        customCategory.textContent = category;
-
-        customCategory.onclick = () => {
-            currentCategory = category;
-            categoryTitle.textContent = category;
-            loadTasks(category);
-        };
-
+        const customCategory = createCategoryElement(category, true);
+        customCategory.classList.add('custom-category');
         categoryBar.appendChild(customCategory);
     });
 }
 newCategoryBtn.addEventListener('click', () => {
     const newCategory = prompt('Enter a name for the new category:')?.trim();
-    if(!newCategory) return;
+    if(!newCategory) {
+        alert('Category name cannot be empty');
+        return
+    };
     
     const insertedCategory = safeRead(STORAGE_KEYS.CATEGORIES, []);
-    if (insertedCategory === '') return alert('Category name cannot be empty');
 
     // check for duplicates
     const exists = Array.from(document.querySelectorAll('.category-item')).some(
-        item => item.dataset.category.toLowerCase() === insertedCategory.toLowerCase()
+        item => item.dataset.category.toLowerCase() === newCategory.toLowerCase()
     );
 
     if(exists) {
@@ -439,7 +443,7 @@ function removeCategory(categoryName, categoryItem){
     savedCategories = savedCategories.filter(category => category !== categoryName);
     localStorage.setItem('categories', JSON.stringify(savedCategories));
 
-    // remove its taska
+    // remove its task
     const tasks = JSON.parse(localStorage.getItem('tasks')) || {}
     delete tasks[categoryName];
     localStorage.setItem('tasks', JSON.stringify(tasks));
