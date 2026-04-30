@@ -268,7 +268,7 @@ function enableDragDrop(li) {
             taskList.insertBefore(draggedItem, isBelow ? targetLi.nextSibling : targetLi);
         }
 
-        // autoScroll(touch.clientY)
+        autoScroll(touch.clientY)
     });
 
     li.addEventListener('touchend', () => {
@@ -294,7 +294,24 @@ function enableDragDrop(li) {
 
 }
 
+function autoScroll(pointerY){
+    const threshold = 80;
+    const speed = 8;
 
+    const viewportHeight = window.innerHeight;
+
+    if(pointerY < threshold) {
+        window.scrollBy({
+            top: -speed, 
+            behavior: 'auto'
+        });
+    } else if (pointerY > viewportHeight - threshold){
+        window.scrollBy({
+top: speed,
+                        behavior: 'auto'
+        });
+    }
+}
 
 // === Helper for mouse drag === //
 taskList.addEventListener('dragover', (event) => {
