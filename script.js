@@ -159,7 +159,7 @@ function renderTasks(text, done) {
     // drag handle
     const dragHandle = document.createElement('span');
     dragHandle.classList.add('drag-handle');
-    dragHandle.textContent = '⥮';
+    dragHandle.textContent = '↑☰↓';
 
     // task text
     const textSpan = document.createElement('span');
@@ -294,6 +294,7 @@ function enableDragDrop(li) {
 
 }
 
+// when drag reach edge of screen to scroll up or down
 function autoScroll(pointerY){
     const threshold = 80;
     const speed = 8;

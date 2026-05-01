@@ -116,7 +116,7 @@ li {
 }
 
 li:hover {
-    transform: scale(1.10);
+    transform: scale(1.01);
 }
 
 li.done span {
@@ -141,7 +141,7 @@ li button:hover {
 
 li:dragging {
     opacity: 0.6;
-    transform: scale(1.06);
+    transform: scale(1.01);
     z-index: 8;
 }
 
@@ -150,11 +150,12 @@ li.placeholder {
     background: transparent;
 }
 
-.drag-hadnle {
-    cursor: grad;
+.drag-handle {
+    cursor: grabbing;
     font-size: 18px;
+    font-weight: 600;
     margin-right: 8px;
-    user-select: none;
+    user-select: none;    
 }
 
 .drag-handle:active {
@@ -200,14 +201,14 @@ button {
     border: none;
     border-radius: 9px;
     cursor: pointer;
-    background: #f6c9cc;
+    background: #d86b82;
     color: #fff;
     font-weight: bold;
     transition: background 0.3s;
 }
 
 button:hover {
-    background: #d86b82;
+    background: #f6c9cc;
 }
 
 .toggle {
@@ -276,7 +277,7 @@ body.daily-theme {
 }
 body.daily-theme .todo-container,
 body.daily-theme .sidebar {
-    background: #fffaf4;
+    background: #fffaf6;
     border: 3px solid #f6c9cc;
 }
 body.daily-theme .category-item.active{
@@ -299,6 +300,10 @@ body.shopping-theme li {
     background: #cdefcf;
     border: 1px solid #7bc47f;
 }
+body.shopping-theme li:hover {
+    background: #b1e4b4;
+    border: 1px solid #7bc47f;
+}
 body.shopping-theme .category-item.active{
     background: #acefb1;
     color:  #fff;
@@ -307,6 +312,11 @@ body.shopping-theme #taskInput {
     border: 2px solid #7bc47f;
 }
 body.shopping-theme button {
+    background: #6eca75;
+    border: 2px solid #7bc47f;
+}
+
+body.shopping-theme button:hover {
     background: #acefb1;
     border: 2px solid #7bc47f;
 }
@@ -323,9 +333,13 @@ body.work-theme .sidebar {
     box-shadow: 0 6px 11px rgba(20,40,60, 0.2);
 }
 body.work-theme li {
-    background: #e9eff5;
+    background: #cbddef;
     border: 1px solid #8aa3b5;
 }
+body.work-theme li:hover {
+    background: #9fc1df;
+}
+
 body.work-theme .category-item.active{
     background: #4a6fa5;
     color: #fff;
@@ -335,6 +349,11 @@ body.work-theme #taskInput {
 }
 body.work-theme button {
     background: #4a6fa5;
+    border: 2px solid #7bc47f;
+}
+
+body.work-theme button:hover {
+    background: #658cc5;
     border: 2px solid #7bc47f;
 }
 
@@ -375,7 +394,7 @@ body.custom-theme li {
 }
 
 body.custom-theme li:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
     box-shadow: 0 4px 10px rgba(90, 60, 120, 0.2);
 }
 
