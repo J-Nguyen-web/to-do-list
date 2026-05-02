@@ -159,7 +159,7 @@ function renderTasks(text, done) {
     // drag handle
     const dragHandle = document.createElement('span');
     dragHandle.classList.add('drag-handle');
-    dragHandle.textContent = '↑☰↓';
+    dragHandle.textContent = '☰';
 
     // task text
     const textSpan = document.createElement('span');
@@ -238,7 +238,7 @@ function enableDragDrop(li) {
     let holdTimeout;
     let isDragging = false;
 
-    li.addEventListener('touchstart', () => {
+    handle.addEventListener('touchstart', () => {
         holdTimeout = setTimeout(() => {
             isDragging = true;
             draggedItem = li;
@@ -250,7 +250,7 @@ function enableDragDrop(li) {
         }, 300) // hold time
     });
 
-    li.addEventListener('touchmove', (event) => {
+    handle.addEventListener('touchmove', (event) => {
 
         if( !isDragging) return;
 
@@ -271,7 +271,7 @@ function enableDragDrop(li) {
         autoScroll(touch.clientY)
     });
 
-    li.addEventListener('touchend', () => {
+    handle.addEventListener('touchend', () => {
         clearTimeout(holdTimeout);
 
         if(isDragging) {
@@ -283,7 +283,7 @@ function enableDragDrop(li) {
         isDragging = false;
     });
 
-    li.addEventListener('touchcancel', () => {
+    handle.addEventListener('touchcancel', () => {
         clearTimeout(holdTimeout);
 
         li.classList.remove('dragging');
