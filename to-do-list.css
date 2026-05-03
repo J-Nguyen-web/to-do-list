@@ -112,7 +112,7 @@ li {
     border: 1px solid #f6c9cc;
     border-radius: 11px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
-    touch-action: none;/* да няма scroll conflict */
+    touch-action: pan-y;/* да няма scroll conflict и да е само по вертикала */
 }
 
 li:hover {
@@ -152,6 +152,7 @@ li.placeholder {
 
 .drag-handle {
     cursor: grabbing;
+    touch-action: none;
     font-size: 18px;
     font-weight: 600;
     margin-right: 8px;
@@ -292,7 +293,7 @@ body.shopping-theme {
 }
 body.shopping-theme .todo-container,
 body.shopping-theme .sidebar {
-    background: #e8fbe6;
+    background: #e8fbe6;    
     border: 2px solid #7bc47f;
     box-shadow: 0 6px 14px rgba(0, 100, 0, 0.2);
 }

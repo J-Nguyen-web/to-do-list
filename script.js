@@ -252,6 +252,7 @@ function enableDragDrop(li) {
 
     handle.addEventListener('touchmove', (event) => {
 
+        passive: false
         if( !isDragging) return;
 
         event.preventDefault();
@@ -269,7 +270,7 @@ function enableDragDrop(li) {
         }
 
         autoScroll(touch.clientY)
-    });
+    },{passive: false});
 
     handle.addEventListener('touchend', () => {
         clearTimeout(holdTimeout);
