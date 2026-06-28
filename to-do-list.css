@@ -273,7 +273,7 @@ button:hover {
 
 /* daily-theme */
 body.daily-theme {
-    background-image: url("background/daily.jpeg"   );
+    background-image: url("backgrounds/daily.jpeg"   );
     background-repeat: repeat;
     background-size: 512px;
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc);
