@@ -273,8 +273,11 @@ button:hover {
 
 /* daily-theme */
 body.daily-theme {
-    background: linear-gradient(135deg, #fae4e7, #fff8dc);
-    color: #333;
+    background-image: url("background/daily.jpeg"   );
+    background-repeat: repeat;
+    background-size: 512px;
+    /* background: linear-gradient(135deg, #fae4e7, #fff8dc);
+    color: #333; */
 }
 body.daily-theme .todo-container,
 body.daily-theme .sidebar {
