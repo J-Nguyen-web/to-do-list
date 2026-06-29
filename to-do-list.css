@@ -273,7 +273,7 @@ button:hover {
 
 /* daily-theme */
 body.daily-theme {
-    background-image: url("backgrounds/daily.jpeg"   );
+    background-image: url("backgrounds/daily.jpeg");
     background-repeat: repeat;
     background-size: 512px;
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc);
@@ -291,8 +291,11 @@ body.daily-theme .category-item.active{
 
 /* shopping-theme */
 body.shopping-theme {
-    background: linear-gradient(135deg, #e0f7df, #b2e6b0);
-    color:  #2d4a2d;
+    background-image: url("backgrounds/shopping.jpeg");
+    background-repeat: repeat;
+    background-size: 512px;
+    /* background: linear-gradient(135deg, #e0f7df, #b2e6b0);
+    color:  #2d4a2d; */
 }
 body.shopping-theme .todo-container,
 body.shopping-theme .sidebar {
