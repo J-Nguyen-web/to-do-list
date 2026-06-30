@@ -13,6 +13,8 @@ body {
     justify-content: center;
     align-items:center;
     margin: 0;
+    overscroll-behaviour-y: none;
+    overscroll-behaviour-x: none;
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f; */
 }
 
@@ -329,9 +331,13 @@ body.shopping-theme button:hover {
 }
 
 /* work-theme */
-body.work-theme {
-    background: linear-gradient(135deg, #e8ecf1, #cfd6de);
-    color: #1f2c3a;
+body.work-theme {    
+    background-image: url("backgrounds/work.jpeg");
+    background-repeat: repeat;
+    background-size: 512px;
+
+    /* background: linear-gradient(135deg, #e8ecf1, #cfd6de);
+    color: #1f2c3a; */
 }
 body.work-theme .todo-container,
 body.work-theme .sidebar {
