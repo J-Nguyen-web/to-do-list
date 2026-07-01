@@ -6,6 +6,11 @@
     padding: 0;
 }
 
+html, body {
+    overscroll-behaviour-y: none;
+    overscroll-behaviour-x: none;
+}
+
 body {
     font-family: "Comic Sans MS", "Comic Nue", sans-serif;
     display: flex;
@@ -13,8 +18,6 @@ body {
     justify-content: center;
     align-items:center;
     margin: 0;
-    overscroll-behaviour-y: none;
-    overscroll-behaviour-x: none;
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f; */
 }
 
