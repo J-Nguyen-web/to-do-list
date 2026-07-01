@@ -6,10 +6,7 @@
     padding: 0;
 }
 
-html, body {
-    overscroll-behaviour-y: none;
-    overscroll-behaviour-x: none;
-}
+
 
 body {
     font-family: "Comic Sans MS", "Comic Nue", sans-serif;
@@ -19,6 +16,15 @@ body {
     align-items:center;
     margin: 0;
     /* background: linear-gradient(135deg, #fae4e7, #fff8dc) #7df07f; */
+}
+html, body {
+    overscroll-behaviour-y: none;
+    overscroll-behaviour-x: none;
+    min-height: 100%
+}
+
+body {
+    min-height: 100vh;
 }
 
 .wrapper {
